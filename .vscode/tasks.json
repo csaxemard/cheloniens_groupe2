@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run (default)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && npm start",
+            "problemMatcher": [ ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+    ],
+}

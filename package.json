@@ -2,15 +2,28 @@
   "name": "chelonian_app",
   "version": "1.0.0",
   "license": "MIT",
-  "author": "",
-  "type": "commonjs",
-  "main": "main.js",
+  "author": "ICEA L3 SDN Group 2",
+  "description": "An app to gather the observation of chelonians in Martinique",
+  "type": "module",
+  "main": "src/back/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "cd ./src/front && npm run build && cd ../../ && npx electron-forge make"
   },
   "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
+    "mariadb": "^3.5.2"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-deb": "^7.11.2",
+    "@electron-forge/maker-rpm": "^7.11.2",
+    "@electron-forge/maker-squirrel": "^7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
+    "@electron-forge/plugin-fuses": "^7.11.2",
+    "@electron/fuses": "^1.8.0",
     "electron": "^42.3.3"
   }
 }

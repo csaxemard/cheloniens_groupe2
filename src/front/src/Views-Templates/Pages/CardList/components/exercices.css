@@ -1,0 +1,166 @@
+.exercice {
+    margin-bottom: 30px;
+    background-color: var(--bg);
+    outline: 10px solid #ffffff46;
+    width: 550px;
+    padding: 15px;
+    position: relative;
+
+
+    &.folded {
+        box-shadow: inset #1e1e1e 0 -5px 10px -5px;
+        border-radius: 12px 12px 0 0;
+        box-shadow: inset #1e1e1e 0 -5px 10px -5px;
+        outline: none;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            bottom: -0px;
+            left: -10px;
+            background-color: #ffffff46;
+            z-index: -1;
+            border-radius: 20px 20px 0 0;
+        }
+    }
+
+
+
+    /* Header */
+
+    .exe-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    h3 {
+        width: fit-content;
+        margin-bottom: 10px;
+        font-size: medium;
+    }
+
+    h3 hr {
+        margin-top: 6px;
+    }
+
+    h3 span {
+        font-size: small;
+        color: #b2b2b2;
+    }
+
+
+
+    /* Boutons et tags globaux */
+
+    button {
+        /* pos self */
+        position: relative;
+        padding: 10px;
+        border: #fff0 solid 5px;
+
+        /* prop self */
+        background-color: #fff !important;
+        cursor: pointer;
+        transition: scale .1s, border-color .2s, box-shadow .2s, var(--transitionDefaults);
+
+        /* prop content */
+        font-size: medium;
+        color: black;
+
+        &:hover {
+            border-color: #dc98c7;
+        }
+
+        &:active {
+            scale: .98;
+        }
+
+        &:disabled {
+            background-color: #727272 !important;
+            border-color: transparent;
+            scale: 1;
+            cursor: auto;
+        }
+    }
+
+    button.reset {
+        /* Autre type de bouton */
+        background-color: #525252 !important;
+        color: #fff;
+        border: none;
+        font-size: small;
+        transition: background-color .2s, var(--transitionDefaults);
+
+        &:active {
+            background-color: #5c5c5c !important;
+            transition: none;
+        }
+    }
+
+    .alert {
+        color: #ff9898;
+    }
+
+    .flexright {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        font-size: small;
+    }
+
+
+    input,
+    textarea {
+        border-radius: 0 !important;
+    }
+
+
+    /* Badge */
+
+    .badge {
+        /* Propriétés self */
+        width: 50px;
+        height: 50px;
+        background-color: #525252;
+        opacity: 0;
+        transition: opacity .3s, font-size .3s, var(--transitionDefaults);
+
+        /* Position du contenu */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        /* Propriétés du contenu */
+        font-size: larger;
+
+
+        &.good {
+            opacity: 1;
+        }
+
+        &.very-good {
+            opacity: 1;
+            font-size: xx-large;
+        }
+    }
+
+
+
+
+    /* Body */
+
+    .exe-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .exe-body .note-small {
+        font-size: small;
+        align-self: end;
+    }
+}
