@@ -1,0 +1,72 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password_hash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "us1",
+      "password_hash": "ecb38b1f5ee7278d655f41050fb3f0efec75249cf4e8ef1284d7280cf2a40e1e",
+      "role": "user"
+    },
+    {
+      "id": 3,
+      "username": "us2",
+      "password_hash": "60cf2130e527b137837704df3c518ca47bc6477e2ffb234479e0004ff971b802",
+      "role": "user"
+    }
+  ],
+  "observations": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "username": "us1",
+      "latitude": 14.6083,
+      "longitude": -61.0716,
+      "observation_date": "2026-06-01",
+      "weather": "Sunny",
+      "turtle_count": 2,
+      "depth_meters": 12,
+      "photo_path": "",
+      "user_comment": "Saw two beautiful green turtles grazing on sea grass near Anse Mitan.",
+      "status": "approved",
+      "moderator_comment": "Validated species identification.",
+      "created_at": "2026-06-01T10:30:00Z"
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "username": "us1",
+      "latitude": 14.4697,
+      "longitude": -60.8785,
+      "observation_date": "2026-06-03",
+      "weather": "Cloudy",
+      "turtle_count": 1,
+      "depth_meters": 5,
+      "photo_path": "",
+      "user_comment": "One large leatherback turtle swimming near Grande Anse des Salines.",
+      "status": "approved",
+      "moderator_comment": "Excellent observation.",
+      "created_at": "2026-06-03T14:15:00Z"
+    },
+    {
+      "id": 3,
+      "user_id": 3,
+      "username": "us2",
+      "latitude": 14.8164,
+      "longitude": -61.2241,
+      "observation_date": "2026-06-07",
+      "weather": "Rainy",
+      "turtle_count": 3,
+      "depth_meters": 18,
+      "photo_path": "",
+      "user_comment": "Spotted 3 hawksbill turtles near the shipwreck at Saint-Pierre.",
+      "status": "pending",
+      "moderator_comment": "",
+      "created_at": "2026-06-07T09:00:00Z"
+    }
+  ]
+}
