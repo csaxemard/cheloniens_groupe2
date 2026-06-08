@@ -24,7 +24,6 @@ document.getElementById('monFormulaire').addEventListener('submit', function (e)
 
 <template>
     <div>
-        <body style="text-align:center;">
     <h1 style="color:green;">Observation de tortues marines</h1>
     <p>Remplis le formulaire ci-dessous pour enregistrer une observation.</p>
 
@@ -45,7 +44,6 @@ document.getElementById('monFormulaire').addEventListener('submit', function (e)
 
     <p id="reponse" style="color:green; font-weight:bold;"></p>
 
-</body>
     </div>
 </template>
 
