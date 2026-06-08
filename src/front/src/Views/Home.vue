@@ -1,4 +1,5 @@
 <script setup>
+    import MainLayout from "@/layouts/MainLayout.vue";
     import { onMounted, ref } from "vue";
 
 
@@ -69,6 +70,7 @@
 
 <!-- Home.vue -->
 <template>
+<<<<<<< HEAD
     <main class="w-full">
         <!-- BEGIN: HeroSection -->
         <section class="bg-brand-green pt-16 pb-6 px-4 rounded-b-[2rem]" data-purpose="hero-area">
@@ -104,11 +106,20 @@
         </section>
         <!-- END: LocationBrowsing -->
     </main>
+=======
+    <MainLayout>
+        <div class="Home">
+            <h1>Suivi de Cheloniens en Martinique</h1>
+            <p>🐢</p>
+        </div>
+    </MainLayout>
+
+>>>>>>> 6d6c786eadbec266d582cb507d68f7c9294bd469
 </template>
 
 
 <style scoped>
-    .View {
+    .Home {
         --bgResourceType: var(--bgTop1);
         --bgResource: var(--bg);
 
@@ -119,119 +130,11 @@
     }
 
     main {
+        flex: 1;
+        
         display: flex;
         flex-direction: column;
         gap: 50px;
-    }
-
-    .resourceTypes {
-        margin-left: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 50px;
-    }
-
-    .resourceType {
-        border: var(--divider);
-        background-color: var(--bgResourceType);
-        position: relative;
-        height: fit-content;
-        padding: 20px;
-        border-radius: 12px;
-
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-
-        h2 {
-            position: relative;
-            display: flex;
-            align-items: center;
-
-            .foldButton {
-                /* position: absolute; */
-                margin-left: 20px;
-                top: 3px;
-                width: 22px;
-                height: 22px;
-                background-color: transparent;
-                color: var(--textSub2);
-                transition: rotate .3s, scale .3s, box-shadow .5s, border-color .5s, var(--transitionDefaults);
-
-                &:hover {
-                    box-shadow: var(--shadowUniform);
-                }
-
-                &.hover {
-                    box-shadow: var(--shadowUniform);
-                }
-            }
-        }
-
-        .resources {
-            margin-top: 30px;
-
-            overflow: hidden;
-            transition: height .3s;
-
-            display: flex;
-            flex-wrap: wrap;
-            gap: 50px;
-
-            .resource {
-                position: relative;
-                max-width: 300px;
-                height: fit-content;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-
-                /* background-color: var(--bgTop1); */
-                background-color: var(--bgResource);
-                border-radius: 12px;
-                border: var(--divider);
-
-                a {
-                    flex: 1;
-                    padding: 20px;
-
-                    display: flex;
-                    align-items: center;
-                    z-index: 5;
-
-                    &::after {
-                        /* Open in new tab icon */
-                        position: absolute;
-                        top: 10px;
-                        right: 10px;
-                    }
-
-                    img {
-                        flex: 0;
-                        max-width: 30px;
-                        margin-right: 10px;
-                        border-radius: 50px;
-                        object-fit: contain;
-                    }
-
-                    .path {
-                        /* margin-left: 35px; */
-                        text-align: right;
-                        border: red;
-                        font-size: small;
-                        color: var(--textSub1);
-                    }
-                }
-
-                .comment {
-                    padding: 20px;
-                    border-top: var(--divider);
-
-                    font-size: 13px;
-                    white-space: pre-line;
-                }
-            }
-        }
     }
 
 </style>

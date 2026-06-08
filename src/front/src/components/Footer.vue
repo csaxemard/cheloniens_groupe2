@@ -5,7 +5,10 @@
 
 <template>
     <footer class="Component">
-        <p>&copy; 2026 {{ appState.titleDefault }} v{{ appState.APP_VERSION }} by <a target="_blank" href="https://github.com/csaxemard">csaxemard</a></p>
+        <p>&copy; 2026 {{ appState.titleDefault }} par IFREMER 
+            <!-- et -->
+            <!-- <a target="_blank" href="https://github.com/csaxemard/cheloniens_groupe2/">ICEA Groupe 2</a> -->
+        </p>
     </footer>
 </template>
 

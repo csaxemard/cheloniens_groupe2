@@ -13,9 +13,7 @@
 
 <template>
     <div id="root" :class="appState.theme.value">
-        <Header></Header>
         <RouterView />
-        <Footer></Footer>
     </div>
 </template>
 

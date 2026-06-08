@@ -18,6 +18,7 @@
 
 <!-- Header.vue -->
 <template>
+<<<<<<< HEAD
     <header class="sticky top-0 z-50 bg-white px-4 py-2 border-b border-gray-100 shadow-sm" data-purpose="navigation-bar">
         <div class="flex items-center justify-between max-w-md mx-auto">
             <div class="flex items-center gap-1">
@@ -36,6 +37,41 @@
             </div>
         </div>
     </header>
+=======
+    <div class="Component">
+        <header :class="{ headerIsHidden: headerIsHidden }">
+            <RouterLink to="/" class="appName">Suivi des Cheloniens</RouterLink>
+
+            <nav class="navbar">
+                <!-- <button class="charAsIcon themeSwitch" title="Activer / Désactiver le mode sombre" type="button"
+                    role="switch" @click="switchTheme()">{{ appState.theme.value == "light" ? "🌙" : "🔆" }}
+                </button> -->
+
+                <!-- Catégorie : -->
+                <!-- <div class="navDrawer-container" @mouseenter="openDrawer(1)" @mouseleave="closeDrawer(1)">
+                    <RouterLink class="navDrawerHandle navLink" :to="`/subPage`">
+                        <span class="category">Nom Categorie</span>
+                        <span class="charAsIcon"> ▿</span>
+                    </RouterLink>
+
+                    <Transition name="fade">
+                        <ul class="navDrawer" v-show="openedDrawerIndex == 1" @mouseenter="openDrawer(1)">
+                            <RouterLink class="navDrawerItem navLink" :to="`/categorie/page`">Nom de la page
+                            </RouterLink>
+                        </ul>
+                    </Transition>
+                </div> -->
+                
+                <RouterLink class="navLink" to="/">J'ai vu une tortue !</RouterLink>
+                <RouterLink class="navLink" to="/">Accueil</RouterLink>
+            </nav>
+        </header>
+        <!-- <button class="hideHeader charAsIcon" title="Afficher / Masquer le bandeau de navigation"
+            :class="{ headerIsHidden: headerIsHidden }" @click="headerIsHidden = !headerIsHidden">{{ headerIsHidden ?
+                "▽" : "△" }}
+        </button> -->
+    </div>
+>>>>>>> 6d6c786eadbec266d582cb507d68f7c9294bd469
 </template>
 
 

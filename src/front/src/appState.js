@@ -85,7 +85,7 @@ export function switchTheme() {
 // --- Main ---
 
 const appState = {
-    titleDefault: "Suivi des Cheloniens",
+    titleDefault: "Suivi de Cheloniens (Ifremer)",
 
     cssThemeVariables: {
         // cssVarName: ["valueLight", "valueDark", "maybe3rdTheme?"]

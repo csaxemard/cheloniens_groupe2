@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Encodage universel pour gérer les caractères accentués en français -->
+  <meta charset="utf-8"/>
+  <!-- Permet de rendre la page responsive (adaptée aux téléphones et tablettes) -->
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Chéloniens - Observation de Tortues</title>
+
+  <!-- Importation de Tailwind CSS (un framework CSS basé sur des classes utilitaires) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Section de styles personnalisés (CSS classique) pour définir nos couleurs de marque -->
+  <style data-purpose="custom-colors">
+    /* Définition des variables de couleurs réutilisables */
+    :root {
+      --brand-green: #31654C;
+      --brand-dark-blue: #2E316B;
+      --bg-white: #FFFFFF;
+    }
+    /* Classes personnalisées pour appliquer ces couleurs en arrière-plan */
+    .bg-brand-green { background-color: #31654C; }
+    .bg-brand-dark-blue { background-color: #2E316B; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+  
+  <!-- EN-TÊTE / BARRE DE NAVIGATION (TopAppBar) -->
+  <!-- 'sticky top-0' : la barre reste fixée en haut lors du défilement -->
+  <!-- 'z-50' : s'assure que la barre passe au-dessus des autres éléments -->
+  <header class="sticky top-0 z-50 bg-white px-4 py-2 border-b border-gray-100 shadow-sm" data-purpose="navigation-bar">
+    <!-- Conteneur centré avec une largeur maximale ('max-w-md') pour un rendu type application mobile -->
+    <div class="flex items-center justify-between max-w-md mx-auto">
+      
+      <!-- LOGO ET ICONE DE LOCALISATION -->
+      <div class="flex items-center gap-1">
+        <!-- Icône de carte (SVG) -->
+        <svg class="h-4 w-4 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="font-extrabold text-lg text-gray-900 tracking-tight">Chéloniens</span>
+      </div>
+
+      <!-- BOUTON DE RECHERCHE -->
+      <div class="p-1">
+        <!-- Icône de loupe (SVG) -->
+        <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main>
+    
+    <!-- SECTION HÉRO (HeroSection) -->
+    <!-- 'rounded-b-[2rem]' : arrondit les coins inférieurs de la section -->
+    <section class="bg-brand-green pt-16 pb-6 px-4 rounded-b-[2rem]" data-purpose="hero-area">
+      <div class="max-w-md mx-auto text-center">
+        <!-- Titre Principal -->
+        <h1 class="text-white text-4xl font-bold mb-10">Chéloniens</h1>
+        
+        <!-- Bouton d'Action (Appel à l'action / CTA) -->
+        <button class="bg-brand-dark-blue hover:bg-opacity-90 transition-all text-white text-2xl font-bold py-6 px-10 rounded-xl shadow-lg mb-10 w-full max-w-xs" data-purpose="observation-cta">
+          J'ai vu une tortue
+        </button>
+        
+        <!-- Image de Tortue sous-marine -->
+        <div class="relative overflow-hidden rounded-2xl border-4 border-emerald-900/20 shadow-xl aspect-video" data-purpose="featured-image">
+          <!-- Modification de la source de l'image pour utiliser le fichier local de manière relative -->
+          <img alt="Tortue de mer sous l'eau" class="w-full h-full object-cover" src="sea-turltes-facts-gallery-01.png"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION : PARCOURIR PAR COMMUNE (LocationBrowsing) -->
+    <section class="py-12 px-4" data-purpose="browse-by-location">
+      <div class="max-w-md mx-auto">
+        <h2 class="text-center font-bold text-gray-800 mb-6">Parcourir par commune</h2>
+        
+        <!-- Grille de badges / filtres de recherche (Pills Grid) -->
+        <div class="flex flex-wrap justify-center gap-3">
+          
+          <!-- Boutons des différentes communes de Martinique -->
+          <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm transition-colors" data-purpose="location-pill">
+            Rivière-Salée
+          </button>
+          
+          <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm transition-colors" data-purpose="location-pill">
+            Schoelcher
+          </button>
+          
+          <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm transition-colors" data-purpose="location-pill">
+            Fort-de-France
+          </button>
+          
+          <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm transition-colors" data-purpose="location-pill">
+            Le Lamentin
+          </button>
+          
+          <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm transition-colors" data-purpose="location-pill">
+            Ducos
+          </button>
+          
+          <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm transition-colors" data-purpose="location-pill">
+            Le François
+          </button>
+          
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Espaceur inférieur (BottomSpacer) pour éviter que le contenu soit masqué ou collé en bas -->
+  <div aria-hidden="true" class="h-20"></div>
+
+</body>
+</html>
