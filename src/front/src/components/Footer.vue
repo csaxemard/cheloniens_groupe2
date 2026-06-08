@@ -5,7 +5,7 @@
 
 <template>
     <footer class="Component">
-        <p>&copy; 2026 {{ appState.titleDefault }} par IFREMER 
+        <p>&copy; 2026 {{ appState.titleDefault }}
             <!-- et -->
             <!-- <a target="_blank" href="https://github.com/csaxemard/cheloniens_groupe2/">ICEA Groupe 2</a> -->
         </p>

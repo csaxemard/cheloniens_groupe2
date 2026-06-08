@@ -41,7 +41,8 @@
                     </Transition>
                 </div> -->
                 
-                <RouterLink class="navLink" to="/">J'ai vu une tortue !</RouterLink>
+                <RouterLink class="navLink" to="/sawTurtle">J'ai vu une tortue !</RouterLink>
+                <RouterLink class="navLink" to="/turtlesDetails">Voir les fiches des espèces de tortues</RouterLink>
                 <RouterLink class="navLink" to="/">Accueil</RouterLink>
             </nav>
         </header>
@@ -53,11 +54,6 @@
 </template>
 
 <style scoped>
-    /* Stratégie de nesting : */
-    /* Je nest par petite notion */
-    /* "Quand je regarde la page, comment je pourrais regrouper les éléments" */
-    /* Les éléments qui sont seuls je les nest dans leur parent */
-    /* Et les éléments qui sont groupés ensemble sont nestés dans leur container */
 
     .Component {
         /* Vars */

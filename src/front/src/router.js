@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import appState from "@/appState.js";
 import Error404 from "@/Views/Error404.vue";
 import Home from "./Views/Home.vue";
-import SawTurtle from "./Views/SawTurtle.vue";
+import SawTurtle from "./Views/sawTurtle.vue";
+import TurtlesDetails from "./Views/TurtlesDetails.vue";
 
 
 
@@ -17,8 +18,14 @@ const routes = [
     {
         path: "/sawTurtle",
         component: SawTurtle,
-        name: "Tortue",
+        name: "Ajouter une observation de tortue",
         meta: { title: `J'ai vu une tortue | ${appState.titleDefault}` }
+    },
+    {
+        path: "/turtlesDetails",
+        component: TurtlesDetails,
+        name: "Fiches Tortues",
+        meta: { title: `Fiches tortues | ${appState.titleDefault}` }
     },
     {
         // 404
