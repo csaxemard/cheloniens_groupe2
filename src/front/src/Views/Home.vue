@@ -67,43 +67,45 @@
     })
 </script>
 
+<!-- Home.vue -->
 <template>
-    <main class="View centered">
-        <div>
-            <h1>Bienvenue sur Web Templates</h1>
-            <p>Ce site regroupe mes designs personnalisés favoris</p>
-        </div>
-
-        <div class="resourceTypes">
-            <section class="resourceType" v-for="(resourceType, key, index) in resourceTypes" :key="index"
-                :id="key">
-                <h2 @click="foldUnfold(index)" @mouseenter="addRemoveFoldButtonHover(key)"
-                    @mouseleave="addRemoveFoldButtonHover(key)">
-                    {{ resourceType.name }}
-                    <button class="foldButton charAsIcon" title="Afficher / Masquer le groupe"
-                        :style="{ rotate: foldedIndexes.includes(index) ? `180deg` : `360deg` }">△</button>
-                </h2>
-                <p class="small textSub1">{{ resourceType.comment }}</p>
-
-                <div class="resources"
-                    :style="{ height: foldedIndexes.includes(index) ? `0` : getResourcesHeight(key) }">
-                    <div class="resource" v-for="(resource, index) in resourceType.resources" :key="index">
-                        <a :href="formatUrl(resource[0]).href" target="_blank" rel="noopener noreferrer">
-                            <img :src="getFavicon(resource[0])" alt="Logo resource">
-
-                            <div>
-                                <span class="hostname">{{ formatUrl(resource[0]).hostname }}</span>
-                                <br>
-                                <span class="path">{{ formatUrl(resource[0]).path }}</span>
-                            </div>
-                        </a>
-                        <p class="comment" v-if="resource[1]">{{ resource[1] }}</p>
-                    </div>
+    <main class="w-full">
+        <!-- BEGIN: HeroSection -->
+        <section class="bg-brand-green pt-16 pb-6 px-4 rounded-b-[2rem]" data-purpose="hero-area">
+            <div class="max-w-md mx-auto text-center">
+                <!-- Main Title -->
+                <h1 class="text-white text-4xl font-bold mb-10">Chéloniens</h1>
+                <!-- Action Button -->
+                <button class="bg-brand-dark-blue hover:bg-opacity-90 transition-all text-white text-2xl font-bold py-6 px-10 rounded-xl shadow-lg mb-10 w-full max-w-xs" data-purpose="observation-cta">
+                    j’ai vu une tortue
+                </button>
+                <!-- Turtle Image Container -->
+                <div class="relative overflow-hidden rounded-2xl border-4 border-emerald-900/20 shadow-xl aspect-video" data-purpose="featured-image">
+                    <img alt="Sea turtle underwater" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtLiIOWDEy4zdEN4KhbtyNdJETXk3MWEuwZa_rKjePARxsdDaCls9vmjIMu_yXpCkVU0Lzmc4fttgAV43g848xKZKpaA6i89seMr-x6VYkQg37JMZkKGHGgIhd6ngX26pNDG9Ap2jb1A9qMp41AOo-TxDXO-pkYgBtfEkZOC8xlBngFK_zoKzRwhUCuulohY4O_evN_k0JKn_Iv_SB_vAuJAbEpStOT_-eBbmO3_jtNWDJPRf0kQMbdNpU">
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+        <!-- END: HeroSection -->
+
+        <!-- BEGIN: LocationBrowsing -->
+        <section class="py-12 px-4" data-purpose="browse-by-location">
+            <div class="max-w-md mx-auto">
+                <h2 class="text-center font-bold text-gray-800 mb-6">Parcourir par commune</h2>
+                <!-- Pills Grid -->
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm" data-purpose="location-pill">Rivière-Salée</button>
+                    <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm" data-purpose="location-pill">Schoelcher</button>
+                    <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm" data-purpose="location-pill">Fort-de-France</button>
+                    <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm" data-purpose="location-pill">Le Lamentin</button>
+                    <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm" data-purpose="location-pill">Ducos</button>
+                    <button class="px-4 py-2 border border-gray-200 rounded-full text-xs text-gray-600 bg-white hover:bg-gray-50 shadow-sm" data-purpose="location-pill">Le François</button>
+                </div>
+            </div>
+        </section>
+        <!-- END: LocationBrowsing -->
     </main>
 </template>
+
 
 <style scoped>
     .View {

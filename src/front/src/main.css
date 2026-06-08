@@ -1,12 +1,17 @@
 /* --- Vars --- */
 
-#root {
-    --font: Verdana, Geneva, Tahoma, sans-serif;
-    --transitionDefaults: background-color .5s, color .5s;
-    --linkNavFontSize: 19px;
+
+:root {
+  --brand-green: #31654C;
+  --brand-dark-blue: #2E316B;
+  --bg-white: #FFFFFF;
+}
+
+.bg-brand-green { background-color: var(--brand-green); }
+.bg-brand-dark-blue { background-color: var(--brand-dark-blue); }
 
     /* Les variables de thèmes sont stockées dans le appState et générées automatiquement */
-}
+
 
 
 
