@@ -16,7 +16,28 @@
     const headerIsHidden = ref(false)
 </script>
 
+<!-- Header.vue -->
 <template>
+<<<<<<< HEAD
+    <header class="sticky top-0 z-50 bg-white px-4 py-2 border-b border-gray-100 shadow-sm" data-purpose="navigation-bar">
+        <div class="flex items-center justify-between max-w-md mx-auto">
+            <div class="flex items-center gap-1">
+                <!-- Location/Logo Icon -->
+                <svg class="h-4 w-4 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-extrabold text-lg text-gray-900 tracking-tight">Chéloniens</span>
+            </div>
+            <div class="p-1">
+                <!-- Search Icon -->
+                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+=======
     <div class="Component">
         <header :class="{ headerIsHidden: headerIsHidden }">
             <RouterLink to="/" class="appName">Suivi des Cheloniens</RouterLink>
@@ -41,7 +62,8 @@
                     </Transition>
                 </div> -->
                 
-                <RouterLink class="navLink" to="/">J'ai vu une tortue !</RouterLink>
+                <RouterLink class="navLink" to="/sawTurtle">J'ai vu une tortue !</RouterLink>
+                <RouterLink class="navLink" to="/turtlesDetails">Voir les fiches des espèces de tortues</RouterLink>
                 <RouterLink class="navLink" to="/">Accueil</RouterLink>
             </nav>
         </header>
@@ -50,14 +72,11 @@
                 "▽" : "△" }}
         </button> -->
     </div>
+>>>>>>> 6d6c786eadbec266d582cb507d68f7c9294bd469
 </template>
 
+
 <style scoped>
-    /* Stratégie de nesting : */
-    /* Je nest par petite notion */
-    /* "Quand je regarde la page, comment je pourrais regrouper les éléments" */
-    /* Les éléments qui sont seuls je les nest dans leur parent */
-    /* Et les éléments qui sont groupés ensemble sont nestés dans leur container */
 
     .Component {
         /* Vars */
