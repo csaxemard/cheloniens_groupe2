@@ -71,7 +71,7 @@
 <template>
     <MainLayout>
         <div class="Home">
-            <h1>Suivi de cheloniens en Martinique</h1>
+            <h1>Suivi de Cheloniens en Martinique</h1>
             <p>🐢</p>
         </div>
     </MainLayout>
@@ -79,7 +79,7 @@
 </template>
 
 <style scoped>
-    .View {
+    .Home {
         --bgResourceType: var(--bgTop1);
         --bgResource: var(--bg);
 
@@ -90,6 +90,8 @@
     }
 
     main {
+        flex: 1;
+        
         display: flex;
         flex-direction: column;
         gap: 50px;
