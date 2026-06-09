@@ -42,6 +42,10 @@ const router = createRouter({
     routes,
 });
 
+// Global navigation hook:
+// - Sets document.title from route meta. Using a global hook centralizes
+//   title management but be careful if routes are loaded asynchronously
+//    ensure `meta.title` is available after lazy-loading.
 router.afterEach((to) => {
     // Hook de navigation exécuté après chaque navigation
     document.title = to.meta.title as string || appState.appTitle;
