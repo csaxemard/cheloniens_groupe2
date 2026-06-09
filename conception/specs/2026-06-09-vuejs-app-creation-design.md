@@ -372,7 +372,42 @@ Pour les agents sur le terrain sans connexion réseau en Martinique :
        // Déclencher la synchronisation des données stockées localement
        syncDataWithServer();
      }
-   });
-   ```
+    });
+    ```
 2. **Stockage Local** : Utiliser **Pinia** avec un plugin de persistance (ex: `pinia-plugin-persistedstate` configuré avec `@capacitor/preferences`) pour enregistrer temporairement les observations localement.
 3. **Synchronisation** : Dès que la connexion est rétablie, envoyer les requêtes stockées en file d'attente vers le point d'accès API `/api/sync/observations`.
+
+---
+
+## 7. Nouvelles Modifications & Implémentations Récentes (Juin 2026)
+
+L'application a été enrichie récemment pour finaliser l'expérience mobile (Capacitor) et améliorer le rendu visuel général.
+
+### A. Positionnement Centré et Image Agrandie sur l'Accueil (`Home.vue`)
+Pour offrir une interface premium et plus aérée sur mobile comme sur ordinateur, la page d'accueil a été entièrement repensée :
+* **Centrage absolu :** Utilisation d'une structure Flexbox complète (`flex-direction: column`, `justify-content: center`, `align-items: center`) pour aligner tous les éléments au milieu de l'écran.
+* **Image agrandie et stylisée :** 
+  * L'image de la tortue a été agrandie pour occuper une taille idéale de `85%` de la largeur avec une limite maximale de `550px`.
+  * Application d'angles arrondis (`border-radius: 16px`), d'une ombre douce (`box-shadow`), et d'une bordure colorée réactive (`border: 4px solid var(--btnBgNavHoverColored)`).
+  * Ajout d'une transition CSS au survol (`hover`) pour zoomer légèrement l'image (`transform: scale(1.02)`).
+* **CTA & Animations :** Ajout d'un bouton d'action principal (CTA) incitant à "Signaler une observation" et animation rebondissante sur l'emoji tortue 🐢.
+* **Correction d'import :** Alignement de la casse de l'import du layout (`@/Layouts/MainLayout.vue` au lieu de `layouts/MainLayout.vue`) pour éviter tout bug lors de la compilation mobile Android/iOS.
+
+### B. Menu Responsif de Navigation Mobile (`Header.vue`)
+L'en-tête de l'application s'adapte désormais automatiquement aux contraintes mobiles :
+* **Bouton Hamburger :** Sous la taille d'écran standard (768px), les boutons textuels de navigation sont masqués au profit d'un bouton hamburger `☰` accessible.
+* **Dropdown Menu :** Le bouton hamburger déploie une liste déroulante interactive (`mobile-dropdown`) positionnée sous le header.
+* **Fermeture automatique :** Écouteur de clics globaux pour refermer automatiquement le menu déroulant si l'utilisateur clique en dehors de la zone de navigation.
+* **Animation :** Intégration d'une transition CSS `slide-fade` pour l'ouverture et fermeture du menu mobile.
+
+### C. Résolution du CSP pour Leaflet (`index.html`)
+Pour corriger le problème d'écran blanc ou de tuiles de carte non chargées sur PC (Electron) et mobile (Capacitor) :
+* **Autorisation CSP :** Modification de la balise Content-Security-Policy (CSP) pour ajouter `img-src 'self' data: https://*.tile.openstreetmap.org;`. Cela indique explicitement au navigateur intégré de faire confiance aux serveurs d'images OpenStreetMap et de charger les tuiles de cartes.
+* **Meta Viewport :** Intégration de la balise meta `viewport` pour adapter la mise en page à la résolution des smartphones de manière responsive.
+
+### D. Géolocalisation Hybride & Carte Interactive (`SawTurtle.vue`)
+* **Géolocalisation Hybride :** La fonction `getGPSLocation` s'adapte à l'environnement d'exécution de l'utilisateur :
+  * Sur mobile : elle utilise le plugin natif `@capacitor/geolocation`.
+  * Sur ordinateur : elle retombe sur l'API web standard `navigator.geolocation`.
+* **Carte Leaflet Interactive :** L'utilisateur peut cliquer sur la carte de Martinique pour ajouter un marqueur (pin), ou faire glisser ce marqueur. Ses coordonnées géographiques mettent automatiquement à jour les champs `latitude` et `longitude` en lecture seule dans le formulaire.
+* **File d'attente hors-ligne :** Lors de la soumission, si `@capacitor/network` indique que l'appareil est déconnecté du réseau, l'observation est sérialisée et stockée localement dans le `localStorage` sous la clé `pending_observations`, garantissant qu'aucune donnée de terrain n'est perdue.
