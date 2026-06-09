@@ -12,6 +12,13 @@ git clone https://github.com/csaxemard/cheloniens_groupe2
 cd cheloniens_groupe2
 npm install
 
+# Fill the /backend/.env file with correct informations (db will be auto-created) :
+DB_HOST=localhost
+DB_USER=
+DB_PASSWORD=
+DB_NAME=cheloniens
+DB_PORT=3306
+
 # Run (development)
 npm run dev
 
