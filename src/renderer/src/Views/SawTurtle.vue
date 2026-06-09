@@ -3,10 +3,13 @@
     import { onMounted, ref } from 'vue';
     import "leaflet/dist/leaflet.css"
     import * as L from 'leaflet'; 
-
+    
 
     const reponse = ref('');
     const isError = ref(false);
+    const mapEl = ref(null);
+    let map = null;
+
 
     async function submitForm(event) {
         // Récupère les champs du formulaire (les inputs ayant un attribut name)
@@ -46,20 +49,41 @@
     }
 
 
-    const mapEl = ref(null);
-    let map = null;
+
+    // onMounted(() => {
+    //     map = L.map(mapEl.value).setView([49.1193089, 6.1757156], 12);
+    //     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: 19, 
+    //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    //     }).addTo(map);
+    //     setTimeout(() => {
+    //         map.invalidateSizet() 
+    //     }, 100);
+    // });
 
     onMounted(() => {
-        map = L.map('map').setView([49.1193089, 6.1757156], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19, 
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+        setTimeout(() => {
+           if (!mapEl.value) return;
+           
+           map = L.map(mapEl.value).setView([49.1193089, 6.1757156], 12);
+           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom:19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+           }).addTo(map);
+        
+           setTimeout(() => {
+            map.invalidateSize();
+           }, 100);
+        }, 50);
     });
+
+
+
 </script>
 
 <template>
-    <MainLayout>
+    
+    <MainLayout style="min-height: 100vh;">
         <main class="SawTurtle centeredX offsetTop">
             <h1>Observation de tortues marines</h1>
             <p>Remplis le formulaire ci-dessous pour enregistrer une observation.</p>
@@ -67,7 +91,7 @@
             <!-- @submit.prevent empêche le rechargement de la page (cause de l'écran blanc) -->
             <div>
                 <h3>Cliquez sur le lieu d'observation</h3>
-                <div id="map" ref="mapEl" style="height: 90vh;"></div>
+                <div ref="mapEl" style="height: 90vh;"></div>
             </div>
            
             <form id="monFormulaire" @submit.prevent="submitForm">
