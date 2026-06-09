@@ -66,6 +66,7 @@ import LoginBox from './LoginBox.vue';
                 </div> -->
 
                 <RouterLink class="navLink" to="/sawTurtle">J'ai vu une tortue !</RouterLink>
+                <RouterLink class="navLink" to="/cheloniensstats">Voir d'autres tortues</RouterLink>
                 <RouterLink class="navLink" to="/">Accueil</RouterLink>
 
                 <button class="profile" title="S'inscrire / Se connecter" @click="showLoginBox">

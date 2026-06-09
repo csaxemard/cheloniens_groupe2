@@ -4,6 +4,7 @@ import appState from "./appState";
 import Home from "./Views/Home.vue";
 import Error404 from "./Views/Error404.vue";
 import SawTurtle from "./Views/SawTurtle.vue";
+import CheloniensStats from "./Views/CheloniensStats.vue";
 
 
 
@@ -19,6 +20,13 @@ const routes = [
         component: SawTurtle,
         name: "Tortue",
         meta: { title: `J'ai vu une tortue | ${appState.appTitle}` }
+    },
+    {
+        path: "/cheloniensstats",
+        component: CheloniensStats,
+        name: "Stats",
+        meta: {title: `Voir d'autres tortues | ${appState.appTitle}`}
+
     },
     {
         // 404
