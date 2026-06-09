@@ -25,16 +25,16 @@
 
 
     async function submitForm(event) {
-        // Récupère les champs du formulaire (les inputs ayant un attribut name)
+        // Retrieves the form fields
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
 
-        // Le champ fichier "photo" : on n'envoie que le nom du fichier (pas le binaire)
+        // The "photo" file field: only the file name is sent (not the binary).
         const photoFile = formData.get('photo');
         data.photos = photoFile && photoFile.name ? photoFile.name : null;
         delete data.photo;
 
-        // Les champs vides deviennent null (évite les erreurs sur les colonnes numériques)
+       // Empty fields become null (avoids errors on numeric columns)
         for (const key in data) {
             if (data[key] === '') data[key] = null;
         }
@@ -103,7 +103,7 @@
             <h1>Observation de tortues marines</h1>
             <p>Remplis le formulaire ci-dessous pour enregistrer une observation.</p>
 
-            <!-- @submit.prevent empêche le rechargement de la page (cause de l'écran blanc) -->
+            <!-- @submit.prevent prevents the page from reloading (causes the white screen) -->
             <div>
                 <h3>Cliquez sur le lieu d'observation</h3>
                 <div ref="mapEl" style="height: 90vh;"></div>

@@ -1,118 +1,95 @@
 <script setup>
-    import MainLayout from '@/Layouts/MainLayout.vue';
-    import { onMounted, ref } from 'vue';
-    import axios from 'axios';
-
- 
-    
-
-    const reponse = ref('');
-    const isError = ref(false);
+import MainLayout from '@/Layouts/MainLayout.vue';
+import { ref } from 'vue';
+import axios from 'axios';
 
 
-    async function submitForm(event) {
-        // Récupère les champs du formulaire (les inputs ayant un attribut name)
-        const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
-
-        // Le champ fichier "photo" : on n'envoie que le nom du fichier (pas le binaire)
-        const photoFile = formData.get('photo');
-        data.photos = photoFile && photoFile.name ? photoFile.name : null;
-        delete data.photo;
-
-        // Les champs vides deviennent null (évite les erreurs sur les colonnes numériques)
-        for (const key in data) {
-            if (data[key] === '') data[key] = null;
-        }
-
-        try {
-            const res = await fetch('http://localhost:3000/api/observations', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await res.json();
-
-            if (res.ok && result.success) {
-                isError.value = false;
-                reponse.value = 'Observation enregistrée. Merci ! 🐢';
-                event.target.reset();
-            } else {
-                isError.value = true;
-                reponse.value = result.error || 'Une erreur est survenue.';
-            }
-        } catch (e) {
-            isError.value = true;
-            reponse.value = 'Impossible de contacter le serveur.';
-        }
-    }
+const isError = ref(false);
 
 
-  
-
-    async function chargerAPI() {
-        loading.value=true;
-       
-        const response = await axios.get('https://api.inaturalist.org');
-    }   
-  
-
+async function chargerAPI() {
+    const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+}
 </script>
 
 <template>
-    
-    <MainLayout style="min-height: 100vh;">
-        <main class="SawTurtle centeredX offsetTop">
-            <h1>Observation de tortues marines</h1>
-        <v-btn
-          color="primary"
-          size="large"
-          @click="chargerAPI"
-          :loading="loading"
-          prepend-icon="mdi-cloud-download"
-          elevation="3"
-        >
-          Test
-        </v-btn>
-            
-        </main>
-    </MainLayout>
+  <MainLayout style="min-height: 100vh;">
+    <main class="cheloniens-stats centeredX offsetTop">
+      <h1>Consultation des espèces (chéloniens)</h1>
+      <p>Recherchez des observations de tortues marines.</p>
+
+      <div class="search-bar">
+        <button @click="chargerAPI" :disabled="loading">
+        </button>
+      </div>
+
+     
+    </main>
+  </MainLayout>
 </template>
 
 <style scoped>
-    .SawTurtle {
-        text-align: center;
-    }
-
-    h1 {
-        color: green;
-    }
-
-    label {
-        display: block;
-        margin-bottom: .85rem;
-        font-size: .9rem;
-        color: #374151;
-    }
-
-    input, select, textarea {
-        display: block;
-        width: 100%;
-        margin-top: .25rem;
-        padding: .5rem;
-        border: 1px solid #000000;
-        border-radius: 6px;
-        box-sizing: border-box;
-        font: inherit;
-    }
-
-    #reponse {
-        color: green;
-        font-weight: bold;
-    }
-
-    #reponse.error {
-        color: crimson;
-    }
-    #map {height: 100vh; width: 100%;}
+.cheloniens-stats {
+  text-align: center;
+  padding: 1rem;
+}
+h1 {
+  color: green;
+}
+.search-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.search-bar input {
+  width: 300px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.search-bar button {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.search-bar button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+.observation-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 300px;
+  background: #f9f9f9;
+  text-align: left;
+}
+.photos img {
+  width: 100%;
+  height: auto;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+}
+#reponse {
+  color: green;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+#reponse.error {
+  color: crimson;
+}
+.no-results {
+  margin-top: 2rem;
+  color: #666;
+}
 </style>
