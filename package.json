@@ -18,13 +18,16 @@
         "dev:electron": "set NODE_ENV=development&& electron-vite dev",
         "dev": "concurrently \"npm run dev:backend\" \"wait-on tcp:3000 && npm run dev:electron\"",
         "build": "npm run typecheck && electron-vite build",
-        "postinstall": "electron-builder install-app-deps",
         "build:unpack": "npm run build && electron-builder --dir",
         "build:win": "set NODE_ENV=production&& npm run build && electron-builder --win",
         "build:mac": "npm run build && electron-builder --mac",
         "build:linux": "npm run build && electron-builder --linux"
     },
     "dependencies": {
+        "@capacitor/android": "^6.2.1",
+        "@capacitor/cli": "^6.2.1",
+        "@capacitor/core": "^6.2.1",
+        "@capacitor/ios": "^6.2.1",
         "@electron-toolkit/preload": "^3.0.2",
         "@electron-toolkit/utils": "^4.0.0",
         "cors": "^2.8.6",
@@ -36,7 +39,7 @@
     "devDependencies": {
         "@electron-toolkit/tsconfig": "^2.0.0",
         "@types/node": "^22.19.1",
-        "@vitejs/plugin-vue": "^6.0.2",
+        "@vitejs/plugin-vue": "^5.2.1",
         "concurrently": "^10.0.3",
         "electron": "^39.2.6",
         "electron-builder": "^26.0.12",

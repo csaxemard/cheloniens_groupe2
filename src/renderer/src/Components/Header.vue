@@ -3,6 +3,7 @@
     import appState from '@/appState';
 import LoginBox from './LoginBox.vue';
 
+<<<<<<< Updated upstream
     // function openDrawer(index) {
     //     openedDrawerIndex.value = index
     // }
@@ -10,6 +11,17 @@ import LoginBox from './LoginBox.vue';
     // function closeDrawer() {
     //     openedDrawerIndex.value = null
     // }
+=======
+    /*
+    function openDrawer(index) {
+        openedDrawerIndex.value = index
+    }
+
+    function closeDrawer() {
+        openedDrawerIndex.value = null
+    }
+    */
+>>>>>>> Stashed changes
 
     function showLoginBox() {
         if (!isLoginBoxShown.value) {
@@ -31,6 +43,11 @@ import LoginBox from './LoginBox.vue';
 
 
 
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     // const openedDrawerIndex = ref(null)
     const headerIsHidden = ref(false)
 
