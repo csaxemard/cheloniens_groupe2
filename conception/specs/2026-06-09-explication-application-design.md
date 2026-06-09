@@ -126,3 +126,28 @@ Pour que l'application fonctionne parfaitement sur toutes les machines en mode d
 3. **Amélioration de l'Accessibilité (Conformité WCAG AA) :**
    * Ajouter un attribut `aria-label="Afficher le profil et le formulaire de connexion"` sur la balise `<button class="profile" ...>` dans le fichier `Header.vue`.
    * Ajouter l'attribut `aria-hidden="true"` sur le `<svg>` imbriqué dans ce bouton de profil pour éviter que les lecteurs d'écran ne lisent des caractères vides.
+
+---
+
+## 7. Historique des Modifications Réalisées dans l'Application
+
+Voici le récapitulatif détaillé des modifications concrètes qui ont été apportées au code source pour résoudre les bugs d'environnement et préparer l'application pour le mobile :
+
+### A. Configuration Générale & Scripts (`package.json`)
+* **Résolution des crashs npm (`postinstall`) :** Suppression du script `"postinstall": "electron-builder install-app-deps"`. Ce script compilait inutilement des dépendances C++ natives inexistantes dans le projet et bloquait l'installation à cause d'incompatibilités ESM sous Node v21.4.0.
+* **Correction de compatibilité Vite/Vue (`@vitejs/plugin-vue`) :** Rétrogradation de `@vitejs/plugin-vue` en version `5.2.1` (via `--legacy-peer-deps`). La version 6 utilisait `crypto.hash` qui requiert Node.js >= 22, provoquant une erreur de compilation sur votre machine (Node v21.4.0).
+* **Ajout de scripts pour le mobile :** Ajout des raccourcis `"dev:android": "npx cap run android"` et `"dev:ios": "npx cap run ios"`.
+* **Ajout des dépendances Capacitor :** Intégration de `@capacitor/core@6`, `@capacitor/cli@6`, `@capacitor/android@6` et `@capacitor/ios@6` pour supporter le build mobile.
+
+### B. Interface Utilisateur & Stabilité TypeScript (`src/renderer/src/`)
+* **Nettoyage et Résolution des conflits git (`Components/Header.vue`) :**
+  * Suppression des balises de conflits de fusion git (`<<<<<<< Updated upstream` ... `=======` ... `>>>>>>> Stashed changes`).
+  * Suppression/mise en commentaire des fonctions et références inutilisées (`openDrawer`, `closeDrawer`, `openedDrawerIndex`). En mode strict, ces variables déclarées mais jamais lues bloquaient l'étape de vérification de type `typecheck:web` lors du build.
+* **Neutralité de la plateforme (`App.vue`) :**
+  * Ajout de la constante `isDesktop` détectant la présence d'Electron via `'electron' in window`.
+  * Encapsulation sécurisée de la requête IPC de test : `window.electron.ipcRenderer.send('ping')` ne s'exécute désormais que sur ordinateur, évitant ainsi un crash de l'application lors de son exécution sous Android/iOS.
+
+### C. Configuration Native Android (`android/`)
+* **Résolution du chemin de SDK (`android/local.properties` [NOUVEAU]) :** Création du fichier définissant la variable `sdk.dir=C:/Users/59669/AppData/Local/Android/Sdk`. Cela permet à Gradle de localiser le SDK Android local et d'exécuter la commande `npx cap run android` avec succès.
+* **Configuration Capacitor (`capacitor.config.ts` [NOUVEAU]) :** Création du fichier de configuration pointant vers le répertoire de build web `out/renderer` avec l'identifiant de paquet unique `com.ifremer.cheloniens`.
+

@@ -1,27 +1,7 @@
 <script setup lang="ts">
     import { ref } from 'vue'
     import appState from '@/appState';
-import LoginBox from './LoginBox.vue';
-
-<<<<<<< Updated upstream
-    // function openDrawer(index) {
-    //     openedDrawerIndex.value = index
-    // }
-
-    // function closeDrawer() {
-    //     openedDrawerIndex.value = null
-    // }
-=======
-    /*
-    function openDrawer(index) {
-        openedDrawerIndex.value = index
-    }
-
-    function closeDrawer() {
-        openedDrawerIndex.value = null
-    }
-    */
->>>>>>> Stashed changes
+    import LoginBox from './LoginBox.vue';
 
     function showLoginBox() {
         if (!isLoginBoxShown.value) {
@@ -39,21 +19,10 @@ import LoginBox from './LoginBox.vue';
         document.removeEventListener("click", closeLoginBox)
     }
 
-
-
-
-
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
-    // const openedDrawerIndex = ref(null)
     const headerIsHidden = ref(false)
 
     // About loginBox and forms
     const isLoginBoxShown = ref(false)
-
 
 </script>
 
