@@ -24,6 +24,28 @@
     // About loginBox and forms
     const isLoginBoxShown = ref(false)
 
+    // Mobile Menu
+    const isMobileMenuOpen = ref(false)
+    function toggleMobileMenu() {
+        isMobileMenuOpen.value = !isMobileMenuOpen.value
+        if (isMobileMenuOpen.value) {
+            setTimeout(() => document.addEventListener("click", closeMobileMenuOutside), 0)
+        } else {
+            document.removeEventListener("click", closeMobileMenuOutside)
+        }
+    }
+    function closeMobileMenuOutside(e?: MouseEvent) {
+        if (e) {
+            const target = e.target as HTMLElement
+            if (target.closest(".mobile-dropdown") || target.closest(".mobile-menu-btn")) return
+        }
+        closeMobileMenu()
+    }
+    function closeMobileMenu() {
+        isMobileMenuOpen.value = false
+        document.removeEventListener("click", closeMobileMenuOutside)
+    }
+
 </script>
 
 <template>
@@ -32,27 +54,25 @@
             <RouterLink to="/" class="appName">{{ appState.appTitle }}</RouterLink>
 
             <nav class="navbar">
-                <!-- <button class="charAsIcon themeSwitch" title="Activer / Désactiver le mode sombre" type="button"
-                    role="switch" @click="switchTheme()">{{ appState.theme.value == "light" ? "🌙" : "🔆" }}
-                </button> -->
+                <!-- Desktop Links -->
+                <div class="desktop-links">
+                    <RouterLink class="navLink" to="/sawTurtle">J'ai vu une tortue !</RouterLink>
+                    <RouterLink class="navLink" to="/">Accueil</RouterLink>
+                </div>
 
-                <!-- Catégorie avec drawer -->
-                <!-- <div class="navDrawer-container" @mouseenter="openDrawer(1)" @mouseleave="closeDrawer(1)">
-                    <RouterLink class="navDrawerHandle navLink" :to="`/subPage`">
-                        <span class="category">Nom Categorie</span>
-                        <span class="charAsIcon"> ▿</span>
-                    </RouterLink>
-
-                    <Transition name="fade">
-                        <ul class="navDrawer" v-show="openedDrawerIndex == 1" @mouseenter="openDrawer(1)">
-                            <RouterLink class="navDrawerItem navLink" :to="`/categorie/page`">Nom de la page
-                            </RouterLink>
+                <!-- Mobile Menu Dropdown -->
+                <div class="mobile-menu-container">
+                    <button class="mobile-menu-btn" @click="toggleMobileMenu" aria-haspopup="true" :aria-expanded="isMobileMenuOpen">
+                        ☰
+                    </button>
+                    
+                    <Transition name="slide-fade">
+                        <ul v-if="isMobileMenuOpen" class="mobile-dropdown">
+                            <li><RouterLink class="dropdown-item" to="/sawTurtle" @click="closeMobileMenu">J'ai vu une tortue !</RouterLink></li>
+                            <li><RouterLink class="dropdown-item" to="/" @click="closeMobileMenu">Accueil</RouterLink></li>
                         </ul>
                     </Transition>
-                </div> -->
-
-                <RouterLink class="navLink" to="/sawTurtle">J'ai vu une tortue !</RouterLink>
-                <RouterLink class="navLink" to="/">Accueil</RouterLink>
+                </div>
 
                 <button class="profile" title="S'inscrire / Se connecter" @click="showLoginBox">
                     <svg class="icon">
@@ -339,6 +359,83 @@
         100% {
             translate: 0 0;
             opacity: 1;
+        }
+    }
+
+    /* --- Responsive & Dropdown Styles --- */
+    .desktop-links {
+        display: flex;
+        gap: 5px;
+    }
+
+    .mobile-menu-container {
+        display: none;
+        position: relative;
+    }
+
+    .mobile-menu-btn {
+        background: transparent;
+        border: none;
+        color: var(--linkNav);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .mobile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 10px;
+        min-width: 200px;
+        background-color: var(--bg);
+        border: 1px solid var(--navDrawerBorder);
+        border-radius: 8px;
+        box-shadow: var(--shadow2);
+        list-style: none;
+        padding: 10px 0;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-dropdown li a {
+        display: block;
+        padding: 12px 20px;
+        text-decoration: none;
+        color: var(--linkNav);
+        transition: background-color 0.2s;
+    }
+
+    .mobile-dropdown li a:hover, .mobile-dropdown li a.router-link-active {
+        background-color: var(--btnBgNavHoverColored);
+        color: var(--linkNavCurrent);
+    }
+
+    .slide-fade-enter-active, .slide-fade-leave-active {
+        transition: all 0.2s ease-out;
+    }
+    .slide-fade-enter-from, .slide-fade-leave-to {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    @media (max-width: 768px) {
+        .desktop-links {
+            display: none;
+        }
+        .mobile-menu-container {
+            display: block;
+        }
+        header .appName {
+            font-size: 1.2em;
+        }
+        .loginBox-Container {
+            max-width: 90%;
+            width: 90%;
+            right: 5%;
         }
     }
 </style>

@@ -6,6 +6,7 @@
     <MainLayout>
         <main class="Home centeredX offsetTop">
             <h1>Suivi de Cheloniens en Martinique</h1>
+            <img src="@/assets/image1.jpg" style="width: 100px; height: auto;" alt="Photo de tortue">
             <p>🐢</p>
         </main>
     </MainLayout>

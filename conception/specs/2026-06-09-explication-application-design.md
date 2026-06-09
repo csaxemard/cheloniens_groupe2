@@ -32,32 +32,38 @@ Situé dans le dossier `backend/`, il s'agit d'un serveur d'API ultra-léger uti
 
 ---
 
-## 3. Stockage et Persistance des Données (Approche 100% JavaScript)
+## 3. Stockage et Persistance des Données (Base de données relationnelle & LocalStorage)
 
-Comme l'application n'utilise pas de base de données relationnelle (telle que MariaDB/MySQL), la sauvegarde des informations s'effectue directement en JavaScript de deux manières complémentaires :
+L'application a évolué pour utiliser une base de données relationnelle **MariaDB/MySQL** côté serveur, tout en conservant une approche hybride côté client pour gérer le mode hors-ligne.
 
-### A. Côté Frontend (Persistance Locale / Client)
-Pour conserver l'état de connexion de l'utilisateur (éviter qu'il ne doive se reconnecter à chaque lancement) :
-* **LocalStorage :** L'API native du navigateur `window.localStorage` permet de sauvegarder des paires clé/valeur persistantes sous forme de texte (ex: un jeton de session ou le profil utilisateur).
-  * *Exemple d'écriture :* `localStorage.setItem('userSession', JSON.stringify(userData))`
-  * *Exemple de lecture :* `const user = JSON.parse(localStorage.getItem('userSession'))`
-* **Electron safeStorage (Alternative sécurisée) :** Pour chiffrer les données sensibles (comme les mots de passe ou tokens d'authentification) avant de les écrire sur le disque de l'utilisateur.
+### A. Côté Frontend (Persistance Locale / Client & Mode Hors-ligne)
+Pour conserver l'état de connexion de l'utilisateur et assurer la résilience hors-ligne :
+* **LocalStorage pour la Session :** Permet de sauvegarder des paires clé/valeur persistantes (ex: session de l'utilisateur ou thème actif).
+* **LocalStorage pour les Observations Hors-ligne :** Si le plugin `@capacitor/network` détecte que l'utilisateur est hors-ligne, les signalements de tortues saisis sont temporairement stockés dans une file d'attente sous la clé `pending_observations` au format JSON, avant d'être synchronisés une fois la connexion rétablie.
+* **Electron safeStorage (Bureau) :** Pour chiffrer les données sensibles (comme les identifiants) sur ordinateur.
 
-### B. Côté Backend (Persistance Fichier / Serveur)
-Pour sauvegarder les comptes d'utilisateurs et les signalements de tortues envoyés :
-* **Fichiers JSON locaux :** Les données reçues par l'API Express sont stockées dans des fichiers texte au format JSON (ex: `users.json` et `observations.json`).
-* **Module Node.js `fs` (File System) :** Le backend utilise le module de gestion de fichiers pour lire et écrire de façon asynchrone :
-  ```typescript
-  import fs from 'fs/promises';
+### B. Côté Backend (Persistance Relationnelle / Serveur)
+Pour sauvegarder de manière structurée et pérenne les signalements de tortues envoyés :
+* **Base de données MariaDB / MySQL :** Les données reçues par l'API Express sont insérées dans la base `cheloniens`, dans la table dédiée `cheloniensmartinique`.
+* **Pool de connexions (`mariadb`) :** Le serveur utilise un pool de connexions géré par le package `mariadb` (défini dans `backend/src/db_connect.ts`) pour communiquer efficacement avec la base de données.
+* **Initialisation de la Base (`backend/src/initDb.ts`) :** Script qui permet de créer automatiquement la base de données et les tables nécessaires lors du démarrage de l'environnement de développement.
 
-  // Exemple de sauvegarde
-  async function saveObservation(newObs) {
-      const data = await fs.readFile('observations.json', 'utf-8');
-      const observations = JSON.parse(data);
-      observations.push(newObs);
-      await fs.writeFile('observations.json', JSON.stringify(observations, null, 2));
-  }
-  ```
+Exemple de connexion au pool dans `db_connect.ts` :
+```typescript
+import * as mariadb from 'mariadb';
+
+const pool = mariadb.createPool({
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'root',
+    database: 'cheloniens',
+    connectionLimit: 5,
+    namedPlaceholders: true
+});
+
+export default pool;
+```
+
 
 ---
 
@@ -69,7 +75,10 @@ Voici une cartographie simplifiée du code source du projet :
 cheloniens_groupe2/
 ├── backend/                        # Serveur API
 │   ├── src/
-│   │   └── server.ts               # Serveur Express & définition des routes API
+│   │   ├── server.ts               # Serveur Express & définition des routes API
+│   │   ├── db_connect.ts           # [NOUVEAU] Gestion du pool de connexions MariaDB
+│   │   ├── initDb.ts               # [NOUVEAU] Initialisation automatique de la base
+│   │   └── cheloniens.sql          # [NOUVEAU] Structure SQL de la base de données
 │   ├── package.json                # Dépendances & scripts du serveur backend
 │   └── tsconfig.json               # Config TypeScript du backend
 ├── src/                            # Code source du conteneur Electron et Frontend
@@ -81,9 +90,9 @@ cheloniens_groupe2/
 │       ├── index.html              # Point d'entrée HTML
 │       └── src/
 │           ├── App.vue             # Composant racine
-│           ├── appState.ts         # Gestion de l'état global et des thèmes
+│           ├── appState.ts         # Gestion de l'état global, des thèmes et de la session utilisateur
 │           ├── router.ts           # Configuration des routes de navigation
-│           ├── Components/         # Composants réutilisables (Header, Footer, SvgSprites)
+│           ├── Components/         # Composants réutilisables (Header, Footer, SvgSprites, LoginBox [NOUVEAU])
 │           ├── Layouts/            # Structures de page (MainLayout)
 │           └── Views/              # Vues principales (Home, SawTurtle, Error404)
 ├── package.json                    # Configuration générale du monorépo (workspaces)
@@ -98,13 +107,18 @@ cheloniens_groupe2/
 Le fichier [appState.ts](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/appState.ts) contient un objet global réactif définissant toutes les variables de couleurs pour les modes **clair** et **sombre** (ex: `--bg`, `--text`, `--btnBgHover`). 
 Au montage de l'application, la fonction `initCssThemeVariables()` génère dynamiquement une balise `<style>` injectée dans le `<head>` pour appliquer ces variables CSS selon le thème actif.
 
-### B. Le Formulaire de Connexion & Inscription (`Header.vue`)
-Le composant [Header.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/Header.vue) intègre une boîte de dialogue modale (`loginBox`) gérée par des variables réactives (`isLoginBoxShown`, `loginBoxTab`). 
-* L'inscription et la connexion s'effectuent sur le même composant en basculant d'onglet.
-* Les données saisies sont liées en temps réel grâce au `v-model` de Vue 3 (`formSignin` et `formLogin`).
-* Le formulaire appelle la fonction `submitProfileForm` qui effectue une requête HTTP `POST` vers le serveur backend.
+### B. Le Formulaire de Connexion & Inscription (`LoginBox.vue` et `Header.vue`)
+Le formulaire de connexion et d'inscription a été extrait dans un composant autonome [LoginBox.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/LoginBox.vue) afin de découpler la logique d'authentification du bandeau de navigation [Header.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/Header.vue).
+* **Header.vue** se charge de l'affichage/masquage de la modale d'authentification via un effet de transition CSS `slideOut` et écoute les clics en dehors pour fermer le panneau.
+* **LoginBox.vue** gère les deux formulaires (connexion et inscription) grâce à des onglets dynamiques. Les données sont liées via `v-model` avec les objets réactifs `formSignin` et `formLogin`, et envoyées au backend via la fonction `submitProfileForm`.
 
-### C. La Structure Globale (`MainLayout.vue`)
+### C. La Carte Interactive et Signalement des Observations (`SawTurtle.vue`)
+La vue [SawTurtle.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Views/SawTurtle.vue) permet de saisir une observation de tortue en l'associant à une position géographique précise :
+* **Carte Leaflet :** Intègre une carte interactive basée sur OpenStreetMap. L'utilisateur peut cliquer sur la carte ou glisser un marqueur (pin) pour renseigner automatiquement la latitude et la longitude dans les champs du formulaire.
+* **Localisation GPS Hybride :** Au chargement, la fonction `getGPSLocation` détermine les coordonnées de l'utilisateur. Elle utilise le plugin natif `@capacitor/geolocation` sur mobile, et l'API `navigator.geolocation` standard sur ordinateur.
+* **Sauvegarde hors-ligne :** Lors de la soumission, si le plugin `@capacitor/network` détecte une absence de réseau, l'observation est mise en attente dans le `localStorage` sous la clé `pending_observations` pour éviter toute perte de données.
+
+### D. La Structure Globale (`MainLayout.vue`)
 Le composant [MainLayout.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Layouts/MainLayout.vue) sert de gabarit commun pour toutes les pages. Il inclut de manière systématique l'en-tête (Header), le pied de page (Footer), et la feuille de sprites SVG utiles pour les icônes de l'application.
 
 ---
@@ -131,7 +145,7 @@ Pour que l'application fonctionne parfaitement sur toutes les machines en mode d
 
 ## 7. Historique des Modifications Réalisées dans l'Application
 
-Voici le récapitulatif détaillé des modifications concrètes qui ont été apportées au code source pour résoudre les bugs d'environnement et préparer l'application pour le mobile :
+Voici le récapitulatif détaillé des modifications concrètes qui ont été apportées au code source pour résoudre les bugs d'environnement, intégrer la base de données relationnelle et préparer l'application pour le mobile :
 
 ### A. Configuration Générale & Scripts (`package.json`)
 * **Résolution des crashs npm (`postinstall`) :** Suppression du script `"postinstall": "electron-builder install-app-deps"`. Ce script compilait inutilement des dépendances C++ natives inexistantes dans le projet et bloquait l'installation à cause d'incompatibilités ESM sous Node v21.4.0.
@@ -139,8 +153,12 @@ Voici le récapitulatif détaillé des modifications concrètes qui ont été ap
 * **Ajout de scripts pour le mobile :** Ajout des raccourcis `"dev:android": "npx cap run android"` et `"dev:ios": "npx cap run ios"`.
 * **Ajout des dépendances Capacitor :** Intégration de `@capacitor/core@6`, `@capacitor/cli@6`, `@capacitor/android@6` et `@capacitor/ios@6` pour supporter le build mobile.
 * **Ajout des dépendances Cartographiques & Off-line :** Ajout de `leaflet` et ses types `@types/leaflet`, ainsi que `@capacitor/geolocation` et `@capacitor/network` pour la gestion du GPS et de la connectivité réseau.
+* **Ajout du client MariaDB :** Intégration de la dépendance `mariadb` à la racine pour assurer la connexion au serveur de base de données depuis Node.js.
 
 ### B. Interface Utilisateur & Stabilité TypeScript (`src/renderer/src/`)
+* **Extraction de `LoginBox.vue` [NOUVEAU] :**
+  * Création du composant autonome [LoginBox.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/LoginBox.vue) contenant toute la structure (HTML) et la logique (TypeScript) d'authentification (connexion/inscription).
+  * Refactorisation de [Header.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/Header.vue) pour importer et utiliser `<LoginBox />` au sein d'une transition animée, allégeant la taille du Header et améliorant la modularité du code.
 * **Nettoyage et Résolution des conflits git (`Components/Header.vue`) :**
   * Suppression des balises de conflits de fusion git (`<<<<<<< Updated upstream` ... `=======` ... `>>>>>>> Stashed changes`).
   * Suppression/mise en commentaire des fonctions et références inutilisées (`openDrawer`, `closeDrawer`, `openedDrawerIndex`). En mode strict, ces variables déclarées mais jamais lues bloquaient l'étape de vérification de type `typecheck:web` lors du build.
@@ -150,11 +168,20 @@ Voici le récapitulatif détaillé des modifications concrètes qui ont été ap
 * **Intégration GPS & Hors-ligne (`Views/SawTurtle.vue`) :**
   * Remplacement du centrage par défaut de la carte (Metz, France) par un ciblage dynamique basé sur la géolocalisation de l'utilisateur (avec repli par défaut sur la Martinique).
   * Création d'une fonction hybride utilisant le plugin `@capacitor/geolocation` sur mobile et l'API standard `navigator.geolocation` sur PC.
-  * Ajout d'un marqueur (pin) déplaçable (draggable) mettant à jour en temps réel des champs de saisie en lecture seule pour la latitude et la longitude.
+  * Ajout d'un marqueur (pin) déplaçable (draggable) et gestionnaire de clics sur la carte pour renseigner dynamiquement et en temps réel les coordonnées de latitude/longitude dans le formulaire (champs en lecture seule).
   * Mise en place d'une file d'attente d'observations hors-ligne : si le plugin `@capacitor/network` détecte que l'utilisateur est déconnecté, la soumission du formulaire stocke temporairement les données dans le `localStorage` sous la clé `pending_observations` au lieu de tenter un envoi HTTP échoué.
 
 ### C. Configuration Native Android (`android/`)
 * **Résolution du chemin de SDK (`android/local.properties` [NOUVEAU]) :** Création du fichier définissant la variable `sdk.dir=C:/Users/59669/AppData/Local/Android/Sdk`. Cela permet à Gradle de localiser le SDK Android local et d'exécuter la commande `npx cap run android` avec succès.
 * **Configuration Capacitor (`capacitor.config.ts` [NOUVEAU]) :** Création du fichier de configuration pointant vers le répertoire de build web `out/renderer` avec l'identifiant de paquet unique `com.ifremer.cheloniens`.
+
+### D. Intégration de la Base de Données MariaDB / MySQL (Backend) [NOUVEAU]
+* **Configuration du pool de connexions (`backend/src/db_connect.ts` [NOUVEAU]) :** Mise en place d'un pool d'accès à la base de données `cheloniens` hébergée localement (avec connexion de secours réutilisable pour les routes Express).
+* **Script d'initialisation (`backend/src/initDb.ts` [NOUVEAU]) :** Création d'une fonction permettant d'assurer la présence de la base de données et de la table `turtles` en environnement local de développement.
+* **Script SQL de structure (`backend/src/cheloniens.sql` [NOUVEAU]) :** Ajout du script de modélisation SQL contenant la structure de la base de données.
+* **Modification de la route Express (`backend/src/server.ts`) :**
+  * Suppression de la route de test `/api/hello`.
+  * Ajout de la route `POST /api/observations` qui récupère les données de signalement envoyées par le client, effectue une validation minimale, et insère les informations (localisation, date, météo, nombre de tortues, profondeur, commentaires, photos) dans la table `cheloniensmartinique` de la base MariaDB via le pool de connexions asynchrone.
+
 
 
