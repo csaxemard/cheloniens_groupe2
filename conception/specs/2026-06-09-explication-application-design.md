@@ -107,10 +107,11 @@ cheloniens_groupe2/
 Le fichier [appState.ts](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/appState.ts) contient un objet global réactif définissant toutes les variables de couleurs pour les modes **clair** et **sombre** (ex: `--bg`, `--text`, `--btnBgHover`). 
 Au montage de l'application, la fonction `initCssThemeVariables()` génère dynamiquement une balise `<style>` injectée dans le `<head>` pour appliquer ces variables CSS selon le thème actif.
 
-### B. Le Formulaire de Connexion & Inscription (`LoginBox.vue` et `Header.vue`)
+### B. Le Formulaire de Connexion & Inscription et Menu Mobile (`LoginBox.vue` et `Header.vue`)
 Le formulaire de connexion et d'inscription a été extrait dans un composant autonome [LoginBox.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/LoginBox.vue) afin de découpler la logique d'authentification du bandeau de navigation [Header.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Components/Header.vue).
 * **Header.vue** se charge de l'affichage/masquage de la modale d'authentification via un effet de transition CSS `slideOut` et écoute les clics en dehors pour fermer le panneau.
 * **LoginBox.vue** gère les deux formulaires (connexion et inscription) grâce à des onglets dynamiques. Les données sont liées via `v-model` avec les objets réactifs `formSignin` et `formLogin`, et envoyées au backend via la fonction `submitProfileForm`.
+* **Menu Hamburger Responsif :** Sur mobile et tablette (largeur < 768px), le bandeau de navigation escamote les liens textuels standards pour afficher un bouton de menu `☰`. Celui-ci déclenche l'apparition d'un menu déroulant interactif (`mobile-dropdown`) avec des animations de transition fluides, se fermant automatiquement lors d'un clic en dehors.
 
 ### C. La Carte Interactive et Signalement des Observations (`SawTurtle.vue`)
 La vue [SawTurtle.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Views/SawTurtle.vue) permet de saisir une observation de tortue en l'associant à une position géographique précise :
@@ -120,6 +121,12 @@ La vue [SawTurtle.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/rende
 
 ### D. La Structure Globale (`MainLayout.vue`)
 Le composant [MainLayout.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Layouts/MainLayout.vue) sert de gabarit commun pour toutes les pages. Il inclut de manière systématique l'en-tête (Header), le pied de page (Footer), et la feuille de sprites SVG utiles pour les icônes de l'application.
+
+### E. L'Interface de la Page d'Accueil (`Home.vue`)
+La vue [Home.vue](file:///c:/xampp/htdocs/TOUT/cheloniens_groupe2/src/renderer/src/Views/Home.vue) accueille l'utilisateur avec un design immersif :
+* **Background Plein Écran :** Utilisation d'un Hero Layout où l'image représentative s'étire sur 100% de la largeur et de la hauteur de la zone de contenu grâce à `object-fit: cover`.
+* **Masque d'Ombrage de Contraste :** Une superposition sombre à opacité contrôlée (`rgba(0, 0, 0, 0.45)`) est positionnée au-dessus de l'image de fond pour assurer un parfait respect des contrastes d'accessibilité (WCAG AA), rendant la typographie blanche lisible.
+* **Appel à l'Action (CTA) :** Un bouton d'action principal invite directement le visiteur à entamer le signalement d'une tortue observée.
 
 ---
 
@@ -182,6 +189,21 @@ Voici le récapitulatif détaillé des modifications concrètes qui ont été ap
 * **Modification de la route Express (`backend/src/server.ts`) :**
   * Suppression de la route de test `/api/hello`.
   * Ajout de la route `POST /api/observations` qui récupère les données de signalement envoyées par le client, effectue une validation minimale, et insère les informations (localisation, date, météo, nombre de tortues, profondeur, commentaires, photos) dans la table `cheloniensmartinique` de la base MariaDB via le pool de connexions asynchrone.
+
+### E. Refonte Visuelle & Responsivité (Interface Utilisateur) [NOUVEAU]
+* **Page d'Accueil Premium (`src/renderer/src/Views/Home.vue`) :**
+  * Passage à un Hero Layout immersif plein écran où l'image de la tortue couvre 100% de la hauteur et largeur de la page sous l'en-tête.
+  * Ajout d'une superposition sombre (`rgba(0, 0, 0, 0.45)`) garantissant un excellent contraste (accessibilité WCAG AA) pour la lisibilité du titre blanc en texte ombré (`text-shadow`).
+  * Animation dynamique sur l'emoji tortue (effet de rebond CSS).
+  * Intégration d'un bouton d'action principal (CTA) incitant à "Signaler une observation".
+  * Correction de la casse d'import de `MainLayout` (majuscule `L`) pour éviter tout échec de compilation portable.
+* **Menu de Navigation Mobile (`src/renderer/src/Components/Header.vue`) :**
+  * Remplacement des liens horizontaux par un menu hamburger déroulant (`☰`) réactif s'activant sous les 768px de largeur d'écran.
+  * Logique de détection des clics en dehors du menu déroulant pour le refermer automatiquement.
+  * Effet de transition CSS fluide (`slide-fade`) pour l'apparition et disparition du menu.
+* **Sécurisation de la Politique de Contenu (CSP) & Viewport (`src/renderer/index.html`) :**
+  * Intégration de la balise meta `viewport` pour assurer le redimensionnement automatique sur écran mobile.
+  * Autorisation de charger les tuiles de cartes OpenStreetMap (`img-src https://*.tile.openstreetmap.org`) pour corriger le blocage des cartes sur PC (Electron) et mobiles (Capacitor).
 
 
 
