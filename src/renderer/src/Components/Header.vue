@@ -57,6 +57,7 @@
                 <!-- Desktop Links -->
                 <div class="desktop-links">
                     <RouterLink class="navLink" to="/sawTurtle">J'ai vu une tortue !</RouterLink>
+                    <RouterLink class="navLink" to="/quiz">Quiz 🐢</RouterLink>
                     <RouterLink class="navLink" to="/">Accueil</RouterLink>
                 </div>
 
@@ -69,6 +70,7 @@
                     <Transition name="slide-fade">
                         <ul v-if="isMobileMenuOpen" class="mobile-dropdown">
                             <li><RouterLink class="dropdown-item" to="/sawTurtle" @click="closeMobileMenu">J'ai vu une tortue !</RouterLink></li>
+                            <li><RouterLink class="dropdown-item" to="/quiz" @click="closeMobileMenu">Quiz 🐢</RouterLink></li>
                             <li><RouterLink class="dropdown-item" to="/" @click="closeMobileMenu">Accueil</RouterLink></li>
                         </ul>
                     </Transition>

@@ -4,6 +4,7 @@ import appState from "./appState";
 import Home from "./Views/Home.vue";
 import Error404 from "./Views/Error404.vue";
 import SawTurtle from "./Views/SawTurtle.vue";
+import Quiz from "./Views/Quiz.vue";
 
 
 
@@ -19,6 +20,12 @@ const routes = [
         component: SawTurtle,
         name: "Tortue",
         meta: { title: `J'ai vu une tortue | ${appState.appTitle}` }
+    },
+    {
+        path: "/quiz",
+        component: Quiz,
+        name: "Quiz",
+        meta: { title: `Quiz Chéloniens | ${appState.appTitle}` }
     },
     {
         // 404
