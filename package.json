@@ -1,34 +1,48 @@
 {
-  "name": "chelonian_app",
-  "version": "1.0.0",
-  "license": "MIT",
-  "author": "ICEA L3 SDN Group 2",
-  "description": "An app to gather the observation of chelonians in Martinique",
-  "type": "module",
-  "main": "src/back/main.js",
-  "scripts": {
-    "dev": "set NODE_ENV=development && concurrently \"npm run dev:vue\" \"npm run dev:electron\"",
-    "dev:vue": "cd src/front && npm run dev",
-    "dev:electron": "wait-on http://localhost:5173 && electron-forge start",
-    "package": "electron-forge package",
-    "make": "set NODE_ENV=production cd ./src/front && npm run build && cd ../../ && npx electron-forge make"
-  },
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
-    "mariadb": "^3.5.2",
-    "vue-router": "^4.6.4"
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^7.11.2",
-    "@electron-forge/maker-deb": "^7.11.2",
-    "@electron-forge/maker-rpm": "^7.11.2",
-    "@electron-forge/maker-squirrel": "^7.11.2",
-    "@electron-forge/maker-zip": "^7.11.2",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
-    "@electron-forge/plugin-fuses": "^7.11.2",
-    "@electron/fuses": "^1.8.0",
-    "concurrently": "^10.0.3",
-    "electron": "^30.0.0",
-    "wait-on": "^9.0.10"
-  }
+    "private": true,
+    "name": "grp2.chelonians-app",
+    "version": "1.0.0",
+    "description": "A desktop application to give informations about chelonians in Martinique",
+    "main": "./out/main/index.js",
+    "author": "Group 2",
+    "workspaces": [
+        ".",
+        "backend"
+    ],
+    "scripts": {
+        "typecheck": "npm run typecheck:node && npm run typecheck:web",
+        "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+        "typecheck:web": "vue-tsc --noEmit -p tsconfig.web.json --composite false",
+        "start": "electron-vite preview",
+        "dev:backend": "set NODE_ENV=development&& npm run dev -w backend",
+        "dev:electron": "set NODE_ENV=development&& electron-vite dev",
+        "dev": "concurrently \"npm run dev:backend\" \"wait-on tcp:3000 && npm run dev:electron\"",
+        "build": "npm run typecheck && electron-vite build",
+        "postinstall": "electron-builder install-app-deps",
+        "build:unpack": "npm run build && electron-builder --dir",
+        "build:win": "set NODE_ENV=production&& npm run build && electron-builder --win",
+        "build:mac": "npm run build && electron-builder --mac",
+        "build:linux": "npm run build && electron-builder --linux"
+    },
+    "dependencies": {
+        "@electron-toolkit/preload": "^3.0.2",
+        "@electron-toolkit/utils": "^4.0.0",
+        "cors": "^2.8.6",
+        "mariadb": "^3.5.2",
+        "vue-router": "^5.1.0"
+    },
+    "devDependencies": {
+        "@electron-toolkit/tsconfig": "^2.0.0",
+        "@types/node": "^22.19.1",
+        "@vitejs/plugin-vue": "^6.0.2",
+        "concurrently": "^10.0.3",
+        "electron": "^39.2.6",
+        "electron-builder": "^26.0.12",
+        "electron-vite": "^5.0.0",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.6",
+        "vue": "^3.5.25",
+        "vue-tsc": "^3.1.6",
+        "wait-on": "^9.0.10"
+    }
 }

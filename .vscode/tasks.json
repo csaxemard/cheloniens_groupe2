@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run (default)",
+            "label": "Run dev (default)",
             "type": "shell",
             "command": "cd ${workspaceFolder} && npm run dev",
             "problemMatcher": [ ],
@@ -10,6 +10,30 @@
                 "kind": "build",
                 "isDefault": true
             },
+        },
+        {
+            "label": "Build (for windows)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && npm run build:win",
+            "problemMatcher": [ ],
+        },
+        {
+            "label": "[Back] Dev (Default)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && npm run dev",
+            "problemMatcher": [ ],
+        },
+        {
+            "label": "[Back] Build",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && npm run build",
+            "problemMatcher": [ ],
+        },
+        {
+            "label": "[Back] Start",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && npm run start",
+            "problemMatcher": [ ],
         },
     ],
 }

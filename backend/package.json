@@ -1,0 +1,20 @@
+{
+    "name": "@grp2.chelonians-app/backend",
+    "version": "1.0.0",
+    "description": "Backend exposing API end-points for CheloniansApp",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch src/server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js"
+    },
+    "dependencies": {
+        "express": "^5.2.1"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "tsx": "^4.22.4",
+        "typescript": "^6.0.3"
+    }
+}

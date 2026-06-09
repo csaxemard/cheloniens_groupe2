@@ -1,0 +1,231 @@
+/* Vars */
+
+:root {
+    --font: Verdana, Geneva, Tahoma, sans-serif;
+    --transitionDefaults: background-color .5s, color .5s;
+    --linkNavFontSize: 19px;
+    --headerHeight: 70px;
+    --fullHeightWithHeader: calc(100vh - 70px);
+    --animateFadeIn: fadeIn 1s ease forwards;
+    --animateSlowBlink: slowBlink 2s ease infinite;
+    /* Les variables de thèmes sont stockées dans le appState et générées automatiquement */
+}
+
+
+
+/* Tags default */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    transition: var(--transitionDefaults);
+
+    /* transition-property: width, height, top, right, bottom, left,
+        transform, scale, rotate,
+        background-color, color, opacity;
+    transition-duration: .5s; */
+}
+
+h1, h2 {
+    font-weight: normal;
+}
+
+a {
+    position: relative;
+    color: var(--link);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+a.newTab {
+    &[target="_blank"]:hover::after {
+        content: "⇗";
+        position: absolute;
+        display: inline-block;
+        margin-left: 7px;
+        text-decoration: none;
+        line-height: 1;
+    }
+}
+
+button {
+    --transitionDefaultsBtn: var(--transitionDefaults),
+        /*scale .3s,*/
+        background-color .3s;
+    --transitionDefaultsBtnActive: var(--transitionDefaults),
+        /*scale 0s,*/
+        background-color 0s;
+
+    /* pos */
+    padding: 5px;
+    border: none;
+
+    /* prop */
+    background-color: var(--btnBg);
+    color: var(--text);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transitionDefaultsBtn);
+
+    /* content pos */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: var(--btnBgHover);
+    }
+
+    &:active {
+        background-color: var(--btnBgActive);
+        /* scale: .9; */
+        filter: brightness(1.1);
+        transition: var(--transitionDefaultsBtnActive);
+    }
+}
+
+
+
+/* SVGs */
+.icon {
+    width: 25px;
+    height: 25px;
+    color: var(--text);
+}
+
+
+
+
+/* Classes globales */
+
+.charAsIcon {
+    line-height: 1;
+    user-select: none;
+}
+
+.textCentered {
+    text-align: center;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.flexHori {
+    display: flex;
+    flex-direction: row;
+}
+
+.error {
+    color: #ffa5a5;
+}
+
+.coloredScrollbar {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #2a2a3a;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #5a5a6e;
+        border-radius: 3px;
+    }
+}
+
+/* Flex items */
+.flexIAlignStart {
+    align-self: flex-start;
+}
+
+.flexIAlignEnd {
+    align-self: flex-end;
+}
+
+/* Concernant main : */
+.fullHeight {
+    height: var(--fullHeightWithHeader);
+    max-height: var(--fullHeightWithHeader);
+}
+
+.fullWidth {
+    width: 100vw;
+    max-width: 100vw;
+}
+
+
+
+@keyframes slowBlink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .2;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes angryText {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    10% {
+        transform: translateX(-6px);
+    }
+
+    20% {
+        transform: translateX(6px);
+    }
+
+    30% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(4px);
+    }
+
+    50% {
+        transform: translateX(-4px);
+    }
+
+    60% {
+        transform: translateX(2px);
+    }
+
+    70% {
+        transform: translateX(-2px);
+    }
+
+    80% {
+        transform: translateX(1px);
+    }
+
+    90% {
+        transform: translateX(-1px);
+    }
+}

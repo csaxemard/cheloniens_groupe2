@@ -1,20 +1,31 @@
-# Chelonians Tracking in Martinique
-Group 2
+# Chelonians App (Group 2)
 
+A desktop application to give informations about chelonians in Martinique
 
 ## Contributing
 
-### Get started
-- Clone the repo
-- Commands to run at project root (in window's cmd, adapt them if Powershell)
-- Run `npm i && cd src/front && npm i` to install dependencies (cmd, not powershell)
-- Run `npm run dev`  to launch app with hot reload (if you get an error, check that you are at project root, not still in src/front)
-- Run `npm run build` to package app and create executable
+### Project Setup
+
+```bash
+# Requirements
+git clone https://github.com/csaxemard/cheloniens_groupe2
+cd cheloniens_groupe2
+npm install
+
+# Run (development)
+npm run dev
+
+# Build
+npm run build:win   # For windows
+npm run build:mac   # For macOS
+npm run build:linux # For Linux
+```
 
 ### Backlog
-
-
-## Ecosystem
-### Tech stack
-- Electron
-- Vue.js
+- Users login
+    - User is connected, how to store these infos on his computer to avoid connecting every time ?
+- Map
+    - How to add a map of Martinique using leaflet or open street map (both ?)
+    - Display a map of martinique only, with zoom enabled
+    - on click, display a pin at this location on the map, get real world coordinates to store in a variable
+    - _+ get other infos based on this location (surroundingCity, isInSea, )
