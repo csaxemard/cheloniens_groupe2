@@ -7,6 +7,9 @@
         <main class="Home centeredX offsetTop">
             <h1>Suivi de Cheloniens en Martinique</h1>
             <p>🐢</p>
+            <div class="adminOptions">
+                
+            </div>
         </main>
     </MainLayout>
 </template>

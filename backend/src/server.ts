@@ -1,81 +1,39 @@
-import express, { Request, Response } from "express";
-import cors from 'cors';
-import pool from './db_connect.js';   // extension .js obligatoire en ESM
+import express from 'express'
+import cors from 'cors'
+import authRoutes from './routes/auth'
+import observationsRoutes from './routes/observations'
+import helloRoutes from './routes/test_hello'
+import { initDatabase } from './db/init'
+import rateLimit from 'express-rate-limit'
+import bcrypt from 'bcrypt'
+import pool from './db/pool'
 
-const app = express();
 
+const app = express()
 const isDev = process.env.NODE_ENV === 'development'
 
-
 app.use(cors({
-    // Permet de n'accepter les requêtes que si elles viennent de l'adresse définie
     origin: isDev ? 'http://localhost:5173' : 'app://.',
     credentials: true
 }))
+app.use(express.json())
 
-app.use(express.json());   // Permet de parser le body d'une requête en json (si Content-Type: application/json dans le header de la req)
+// Limit login and signin attempts to prevent attacks
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 }) // 5 attempts max every 15min
+if (process.env.NODE_ENV === 'production') {
+    app.use('/api/login', limiter)
+    app.use('/api/signin', limiter)
+}
 
-// Enregistre une observation de tortue dans la base
-app.post("/api/observations", async (req: Request, res: Response) => {
-    const {
-        localisation,
-        date_observation,
-        meteo,
-        espece,
-        nombre_tortues,
-        profondeur,
-        photos,
-        commentaires,
-        sexe,
-        stade
-    } = req.body;
+app.use('/api', authRoutes)
+app.use('/api/observations', observationsRoutes)
+app.use('/api/hello', helloRoutes)
 
-    // Validation minimale côté serveur
-    if (!localisation || !date_observation) {
-        res.status(400).json({
-            success: false,
-            error: "La localisation et la date d'observation sont obligatoires."
-        });
-        return;
-    }
 
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        const result = await conn.query(
-            `INSERT INTO cheloniensmartinique
-                (localisation, date_observation, meteo, espece, nombre_tortues, profondeur, photos, commentaires, sexe, stade)
-             VALUES
-                (:localisation, :date_observation, :meteo, :espece, :nombre_tortues, :profondeur, :photos, :commentaires, :sexe, :stade)`,
-            { localisation, date_observation, meteo, espece, nombre_tortues, profondeur, photos, commentaires, sexe, stade }
-        );
+// Wait for db to be ready before starting
+await initDatabase()
 
-        // insertId est un BigInt → on le convertit pour le JSON
-        res.status(201).json({ success: true, id: Number(result.insertId) });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            success: false,
-            error: "Erreur lors de l'enregistrement de l'observation."
-        });
-    } finally {
-        if (conn) conn.release();   // toujours libérer la connexion
-    }
+const port = 3000
+initDatabase().then(() => {
+    app.listen(port, () => console.log(`Server running on http://localhost:${port}`))
 })
-
-const port = 3000;
-app.listen(port,
-    () => console.log(`Server running on http://localhost:${port}`)
-);
-
-/* Test route post en console :
-fetch("/api/hello", {
-    method: "POST",
-    body: "Bonjour facteur :D"
-})
-.then((res) => {
-    console.log("ok : ", res.ok);
-    console.log("status : ", res.status);
-    res.text().then(body => console.log("body :", body));
-});
-*/

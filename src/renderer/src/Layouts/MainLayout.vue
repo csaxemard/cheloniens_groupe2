@@ -15,8 +15,8 @@
 
 <style scoped>
     .MainLayout {
-        height: 100vh;
         width: 100vw;
+        min-height: 100vh;
 
         background-color: var(--bg);
 
