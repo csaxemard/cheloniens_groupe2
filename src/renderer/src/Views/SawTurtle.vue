@@ -1,4 +1,5 @@
 <script setup>
+    import appState from '@/appState';
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { onMounted, ref } from 'vue';
     import "leaflet/dist/leaflet.css"
@@ -25,16 +26,23 @@
 
 
     async function submitForm(event) {
-        // Récupère les champs du formulaire (les inputs ayant un attribut name)
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
+        
+        // Add the authenticated user's ID to the payload
+        if (!appState.currentUser?.id) {
+            reponse.value = 'Vous devez être connecté pour enregistrer une observation';
+            isError.value = true;
+            return;
+        }
+        data.user_id = appState.currentUser.id;
 
-        // Le champ fichier "photo" : on n'envoie que le nom du fichier (pas le binaire)
+        // File field "photo": only send the filename (not the binary data)
         const photoFile = formData.get('photo');
         data.photos = photoFile && photoFile.name ? photoFile.name : null;
         delete data.photo;
 
-        // Les champs vides deviennent null (évite les erreurs sur les colonnes numériques)
+        // Empty fields are converted to null (prevents errors on numeric DB columns)
         for (const key in data) {
             if (data[key] === '') data[key] = null;
         }
@@ -103,7 +111,7 @@
             <h1>Observation de tortues marines</h1>
             <p>Remplis le formulaire ci-dessous pour enregistrer une observation.</p>
 
-            <!-- @submit.prevent empêche le rechargement de la page (cause de l'écran blanc) -->
+            <!-- `@submit.prevent` prevents a full page reload (which caused a white screen) -->
             <div>
                 <h3>Cliquez sur le lieu d'observation</h3>
                 <div ref="mapEl" style="height: 90vh;"></div>

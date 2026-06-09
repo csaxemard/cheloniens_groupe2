@@ -3,12 +3,15 @@ import { reactive } from "vue";
 interface AppState {
     appTitle: string,
     cssThemeVariables: Record<string, string[]>,
-    theme: "dark" |"light",
-    currentUser: {username: string, role: "admin" | "normalUser"} | null,
+    theme: "dark" | "light",
+    currentUser: { username: string, role: "admin" | "normalUser" } | null,
 }
 
 
 
+// Generates a <style> tag containing CSS custom properties derived from
+// `appState.cssThemeVariables` so the rest of the app can use `var(--name)`.
+// Dark fallback is the light value if second entry is missing.
 export function initCssThemeVariables() {
     const style = document.createElement("style")
 
@@ -23,6 +26,7 @@ export function initCssThemeVariables() {
     light += "}";
     dark += "}";
 
+    // Mark the style element so it can be found/updated by callers.
     style.textContent = "/* [Dev note] Style generated from appState.js */\n" + light + "\n" + dark
     style.id = "css-theme-variables"
     style.dataset.devNote = "Style generated from appState.js"
@@ -31,12 +35,17 @@ export function initCssThemeVariables() {
 
 
 
+/** Application-wide reactive state.  
+ * This object is intended to be imported and mutated directly by components (simple global store).
+ * Because it's a shallow reactive object,
+ * avoid replacing appState wholesale, mutate its properties instead to preserve reactivity.
+*/
 const appState = reactive<AppState>({
     appTitle: "Cheloniens en Martinique",
 
     cssThemeVariables: {
         // cssVarName: ["valueLight", "valueDark", "maybe3rdTheme?"]
-        // Si dark n'a pas de valeur, il prend la valeur de light comme fallback
+        // If no dark value is provided, the light value is used as a fallback
 
         /* Bg, aplats */
         bg: ["#fff", "#3e3e3e"],

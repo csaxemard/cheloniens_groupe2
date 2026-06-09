@@ -16,17 +16,15 @@
         // Forms checks
         for (const field of Object.values(form)) {
             if (field == "") {
-                setTimeout(() => formErrorMsg.value = "Les champs ne doivent pas être vides.", 0);   // Note : SetTimeout 0s waits for the nexrt ren,der tick
+                setTimeout(() => formErrorMsg.value = "Les champs ne doivent pas être vides.", 0);   // Note : SetTimeout 0s waits for the nexrt render tick
                 return;
             }
         }
 
         formWaitMsg.value = "Veuillez patienter..."
 
-        // Fetch
-
+        // Send POST request to backend with username/password as JSON
         fetch(`http://localhost:3000${endpoint}`, {
-            // TODO: Request to backend
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: form.username, password: form.password })
