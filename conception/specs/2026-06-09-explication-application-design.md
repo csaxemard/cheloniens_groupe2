@@ -138,6 +138,7 @@ Voici le récapitulatif détaillé des modifications concrètes qui ont été ap
 * **Correction de compatibilité Vite/Vue (`@vitejs/plugin-vue`) :** Rétrogradation de `@vitejs/plugin-vue` en version `5.2.1` (via `--legacy-peer-deps`). La version 6 utilisait `crypto.hash` qui requiert Node.js >= 22, provoquant une erreur de compilation sur votre machine (Node v21.4.0).
 * **Ajout de scripts pour le mobile :** Ajout des raccourcis `"dev:android": "npx cap run android"` et `"dev:ios": "npx cap run ios"`.
 * **Ajout des dépendances Capacitor :** Intégration de `@capacitor/core@6`, `@capacitor/cli@6`, `@capacitor/android@6` et `@capacitor/ios@6` pour supporter le build mobile.
+* **Ajout des dépendances Cartographiques & Off-line :** Ajout de `leaflet` et ses types `@types/leaflet`, ainsi que `@capacitor/geolocation` et `@capacitor/network` pour la gestion du GPS et de la connectivité réseau.
 
 ### B. Interface Utilisateur & Stabilité TypeScript (`src/renderer/src/`)
 * **Nettoyage et Résolution des conflits git (`Components/Header.vue`) :**
@@ -146,8 +147,14 @@ Voici le récapitulatif détaillé des modifications concrètes qui ont été ap
 * **Neutralité de la plateforme (`App.vue`) :**
   * Ajout de la constante `isDesktop` détectant la présence d'Electron via `'electron' in window`.
   * Encapsulation sécurisée de la requête IPC de test : `window.electron.ipcRenderer.send('ping')` ne s'exécute désormais que sur ordinateur, évitant ainsi un crash de l'application lors de son exécution sous Android/iOS.
+* **Intégration GPS & Hors-ligne (`Views/SawTurtle.vue`) :**
+  * Remplacement du centrage par défaut de la carte (Metz, France) par un ciblage dynamique basé sur la géolocalisation de l'utilisateur (avec repli par défaut sur la Martinique).
+  * Création d'une fonction hybride utilisant le plugin `@capacitor/geolocation` sur mobile et l'API standard `navigator.geolocation` sur PC.
+  * Ajout d'un marqueur (pin) déplaçable (draggable) mettant à jour en temps réel des champs de saisie en lecture seule pour la latitude et la longitude.
+  * Mise en place d'une file d'attente d'observations hors-ligne : si le plugin `@capacitor/network` détecte que l'utilisateur est déconnecté, la soumission du formulaire stocke temporairement les données dans le `localStorage` sous la clé `pending_observations` au lieu de tenter un envoi HTTP échoué.
 
 ### C. Configuration Native Android (`android/`)
 * **Résolution du chemin de SDK (`android/local.properties` [NOUVEAU]) :** Création du fichier définissant la variable `sdk.dir=C:/Users/59669/AppData/Local/Android/Sdk`. Cela permet à Gradle de localiser le SDK Android local et d'exécuter la commande `npx cap run android` avec succès.
 * **Configuration Capacitor (`capacitor.config.ts` [NOUVEAU]) :** Création du fichier de configuration pointant vers le répertoire de build web `out/renderer` avec l'identifiant de paquet unique `com.ifremer.cheloniens`.
+
 
