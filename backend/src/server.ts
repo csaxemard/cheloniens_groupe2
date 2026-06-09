@@ -21,10 +21,13 @@ app.post("/api/observations", async (req: Request, res: Response) => {
         localisation,
         date_observation,
         meteo,
+        espece,
         nombre_tortues,
         profondeur,
         photos,
-        commentaires
+        commentaires,
+        sexe,
+        stade
     } = req.body;
 
     // Validation minimale côté serveur
@@ -41,11 +44,12 @@ app.post("/api/observations", async (req: Request, res: Response) => {
         conn = await pool.getConnection();
         const result = await conn.query(
             `INSERT INTO cheloniensmartinique
-                (localisation, date_observation, meteo, nombre_tortues, profondeur, photos, commentaires)
+                (localisation, date_observation, meteo, espece, nombre_tortues, profondeur, photos, commentaires, sexe, stade)
              VALUES
-                (:localisation, :date_observation, :meteo, :nombre_tortues, :profondeur, :photos, :commentaires)`,
-            { localisation, date_observation, meteo, nombre_tortues, profondeur, photos, commentaires }
+                (:localisation, :date_observation, :meteo, :espece, :nombre_tortues, :profondeur, :photos, :commentaires, :sexe, :stade)`,
+            { localisation, date_observation, meteo, espece, nombre_tortues, profondeur, photos, commentaires, sexe, stade }
         );
+
         // insertId est un BigInt → on le convertit pour le JSON
         res.status(201).json({ success: true, id: Number(result.insertId) });
     } catch (err) {
