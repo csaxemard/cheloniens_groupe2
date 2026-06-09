@@ -21,7 +21,7 @@ import LoginBox from './LoginBox.vue';
     function closeLoginBox(e?: MouseEvent) {
         if (e) {
             const target = e.target as HTMLElement
-            if (target.closest(".loginBox") || target.closest(".profile")) return
+            if (target.closest(".LoginBox") || target.closest(".profile")) return
         }
         isLoginBoxShown.value = false
         document.removeEventListener("click", closeLoginBox)

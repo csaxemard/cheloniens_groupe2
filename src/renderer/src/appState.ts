@@ -1,8 +1,10 @@
+import { reactive } from "vue";
+
 interface AppState {
     appTitle: string,
     cssThemeVariables: Record<string, string[]>,
-    theme: "light" | "dark",
-    currentUser: null | {username: string, email: string},
+    theme: "dark" |"light",
+    currentUser: {username: string, role: "admin" | "normalUser"} | null,
 }
 
 
@@ -29,7 +31,7 @@ export function initCssThemeVariables() {
 
 
 
-const appState: AppState = {
+const appState = reactive<AppState>({
     appTitle: "Cheloniens en Martinique",
 
     cssThemeVariables: {
@@ -70,9 +72,9 @@ const appState: AppState = {
         btnBgActive: ["#bdd6ff", "#9b9b9b"],
     },
 
-    theme: "dark",
+    theme: "light",
 
     currentUser: null
-};
+});
 
 export default appState

@@ -1,78 +1,123 @@
 <script setup lang="ts">
+    import appState from '@/appState';
     import { reactive, ref } from 'vue';
 
 
 
     function submitProfileForm(loginOrSignin: "login" | "signin") {
-        const form = loginOrSignin == 'login' ? formLogin : formSignin
+        const form = loginOrSignin === 'login' ? formLogin : formSignin
+        const endpoint = loginOrSignin === 'login' ? '/api/login' : '/api/signin'
 
+        // Reset messages
         formWaitMsg.value = ""
         formErrorMsg.value = ""
+        formOkMsg.value = ""
 
-        // Vérification form
+        // Forms checks
         for (const field of Object.values(form)) {
             if (field == "") {
-                setTimeout(() => formErrorMsg.value = "Les champs ne doivent pas être vides.", 0);
+                setTimeout(() => formErrorMsg.value = "Les champs ne doivent pas être vides.", 0);   // Note : SetTimeout 0s waits for the nexrt ren,der tick
                 return;
             }
         }
 
+        formWaitMsg.value = "Veuillez patienter..."
+
         // Fetch
 
-        formWaitMsg.value = "Veuillez patienter..."
-        fetch("http://localhost:3000/api/hello", {
+        fetch(`http://localhost:3000${endpoint}`, {
+            // TODO: Request to backend
             method: "POST",
-            body: "Bonjour facteur :D"
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: form.username, password: form.password })
         })
-            .then((res) => {
-                console.log("ok : ", res.ok);
-                console.log("status : ", res.status);
-                res.text().then(body => console.log("body :", body));
-            });
+            .then(async res => {
+                if (res.status === 429) {
+                    throw new Error('Too many attempts, wait 15 minutes')
+                }
+                const data = await res.json()
+                if (!res.ok) throw new Error(data.error)
+                return data
+            })
+            .then(data => {
+                formWaitMsg.value = ""
+                if (loginOrSignin === "signin") {
+                    formOkMsg.value = "Inscription réussie. Vous pouvez vous connecter."
+                    loginBoxCurrentTab.value = "loginForm"
+                    formLogin.username = formSignin.username
+                    // Reet fields
+                    formSignin.username = ""
+                    formSignin.password = ""
+                } else {
+                    appState.currentUser = data.user
+                    formLogin.password = ""
+                }
+            })
+            .catch(error => {
+                formWaitMsg.value = ""
+                console.error("Error details:", error)
+                formErrorMsg.value = error
+            })
+    }
 
-
-
+    function logout() {
+        appState.currentUser = null
+        loginBoxCurrentTab.value = "loginForm"
+        formLogin.username = ""
+        formLogin.password = ""
+        // Small bug : LoginBox gets closed on click logout button
     }
 
 
 
-    const loginBoxCurrentTab = ref<"loginform" | "signinForm">("signinForm")
+    const loginBoxCurrentTab = ref<"loginForm" | "signinForm">("signinForm")
     const formWaitMsg = ref("")
     const formErrorMsg = ref("")
-    const formSignin = reactive({ email: "", lastName: "", firstName: "", password: "" })
-    const formLogin = reactive({ email: "", password: "" })
-
+    const formOkMsg = ref("")
+    const formSignin = reactive({ username: "", password: "" })
+    const formLogin = reactive({ username: "", password: "" })
+    // const showPassword = ref(false)   // TODO: Add eye button to show password right after label
 </script>
 
 <template>
-    <div class="loginBox">
-        <div class="tabs">
-            <button :class="loginBoxCurrentTab != 'loginform' ? 'isCurrentTab' : ''"
-                @click="loginBoxCurrentTab = 'signinForm'">Inscription</button>
-            <hr>
-            <button :class="loginBoxCurrentTab == 'loginform' ? 'isCurrentTab' : ''"
-                @click="loginBoxCurrentTab = 'loginform'">Connexion</button>
+    <div class="LoginBox">
+        <div class="userIsConnectedBox" v-if="appState.currentUser != null">
+            <p>Utilisateur connecté</p>
+            <p>{{ appState.currentUser.username }} <span v-if="appState.currentUser.role === 'admin'"> (admin)</span>
+            </p>
+            <button @click="logout">Se déconnecter</button>
         </div>
-        <form v-if="loginBoxCurrentTab == 'signinForm'" @submit.prevent="() => submitProfileForm('signin')">
-            <label>Mail<input type="email" v-model="formSignin.email"></label>
-            <label>Nom<input type="text" v-model="formSignin.lastName"></label>
-            <label>Prénom<input type="text" v-model="formSignin.firstName"></label>
-            <label>Mot de passe<input type="text" v-model="formSignin.password"></label>
-            <button type="submit">S'inscrire</button>
-        </form>
-        <form v-if="loginBoxCurrentTab == 'loginform'" @submit.prevent="() => submitProfileForm('login')">
-            <label>Mail<input type="email" v-model="formLogin.email"></label>
-            <label>Mot de passe<input type="text" v-model="formLogin.password"></label>
-            <button type="submit">Se connecter</button>
-        </form>
-        <p class="wait" v-if="formWaitMsg">{{ formWaitMsg }}</p>
-        <p class="error" v-if="formErrorMsg">{{ formErrorMsg }}</p>
-    </div>
 
+        <div class="authForms" v-else>
+            <div class="tabs">
+                <button :class="loginBoxCurrentTab != 'loginForm' ? 'isCurrentTab' : ''"
+                    @click="loginBoxCurrentTab = 'signinForm'">Inscription</button>
+                <hr>
+                <button :class="loginBoxCurrentTab == 'loginForm' ? 'isCurrentTab' : ''"
+                    @click="loginBoxCurrentTab = 'loginForm'">Connexion</button>
+            </div>
+
+            <form v-if="loginBoxCurrentTab == 'signinForm'" @submit.prevent="() => submitProfileForm('signin')">
+                <label>Identifiant<input type="text" v-model="formSignin.username"></label>
+                <label>Mot de passe<input type="password" visible v-model="formSignin.password"></label>
+                <button type="submit">S'inscrire</button>
+            </form>
+
+            <form v-if="loginBoxCurrentTab == 'loginForm'" @submit.prevent="() => submitProfileForm('login')">
+                <label>Identifiant<input type="text" v-model="formLogin.username"></label>
+                <label>Mot de passe<input type="password" visible v-model="formLogin.password"></label>
+                <button type="submit">Se connecter</button>
+            </form>
+
+            <p class="formOk" v-if="formOkMsg">{{ formOkMsg }}</p>
+            <p class="wait" v-if="formWaitMsg">{{ formWaitMsg }}</p>
+            <p class="error" v-if="formErrorMsg">{{ formErrorMsg }}</p>
+        </div>
+    </div>
 </template>
 
 <style scoped>
-    .loginBox {
+    .LoginBox {
         background-color: var(--bgTop1);
         border-radius: 12px;
         box-shadow: var(--shadow2);
@@ -120,10 +165,13 @@
             }
         }
 
-        p {
+        .authForms > p {
             text-align: center;
-            word-break: break-all;
             font-size: .9em;
+
+            &.formOk {
+                color: #4dcc4d;
+            }
 
             &.wait {
                 color: gold;

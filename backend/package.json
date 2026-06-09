@@ -4,14 +4,17 @@
     "description": "Backend exposing API end-points for CheloniansApp",
     "type": "module",
     "scripts": {
-        "dev": "tsx watch src/server.ts",
+        "dev": "echo Pensez à lancer mariadb avec la commande mariadbd (ne pas oublier le d final) && set NODE_ENV=development&& tsx watch src/server.ts",
         "build": "tsc",
         "start": "node dist/server.js"
     },
     "dependencies": {
-        "express": "^5.2.1"
+        "bcrypt": "^6.0.0",
+        "express": "^5.2.1",
+        "express-rate-limit": "^8.5.2"
     },
     "devDependencies": {
+        "@types/bcrypt": "^6.0.0",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
         "tsx": "^4.22.4",
