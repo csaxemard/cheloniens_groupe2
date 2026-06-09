@@ -12,14 +12,18 @@ git clone https://github.com/csaxemard/cheloniens_groupe2
 cd cheloniens_groupe2
 npm install
 
-# Fill the /backend/.env file with correct informations (db will be auto-created) :
+# Create and fill the /backend/.env file with correct informations to log into mariadb (db will be auto-created) :
 DB_HOST=localhost
 DB_USER=
 DB_PASSWORD=
 DB_NAME=cheloniens
 DB_PORT=3306
 
+# Create once the database in mariadb
+mariadb -u root -p -e "CREATE DATABASE IF NOT EXISTS cheloniens;"
+
 # Run (development)
+mariadbd    # Launch mariadbd in a separate terminal
 npm run dev
 
 # Build
