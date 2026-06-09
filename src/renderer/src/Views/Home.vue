@@ -9,7 +9,6 @@
             <p>🐢</p>
         </main>
     </MainLayout>
-
 </template>
 
 <style scoped>

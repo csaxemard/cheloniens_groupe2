@@ -6,6 +6,7 @@ const app = express();
 
 const isDev = process.env.NODE_ENV === 'development'
 
+
 app.use(cors({
     // Permet de n'accepter les requêtes que si elles viennent de l'adresse définie
     origin: isDev ? 'http://localhost:5173' : 'app://.',
