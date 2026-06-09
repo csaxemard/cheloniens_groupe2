@@ -1,7 +1,8 @@
 interface AppState {
     appTitle: string,
-    cssThemeVariables: Record<string, string[]>
-    theme: "light" | "dark"
+    cssThemeVariables: Record<string, string[]>,
+    theme: "light" | "dark",
+    currentUser: null | {username: string, email: string},
 }
 
 
@@ -69,7 +70,9 @@ const appState: AppState = {
         btnBgActive: ["#bdd6ff", "#9b9b9b"],
     },
 
-    theme: "dark"
+    theme: "dark",
+
+    currentUser: null
 };
 
 export default appState

@@ -1,9 +1,11 @@
 import express, { Request, Response } from "express";
 import cors from 'cors'
+import { initDatabase } from "./initDB";
 
 const app = express();
 
 const isDev = process.env.NODE_ENV === 'development'
+
 
 app.use(cors({
     // Permet de n'accepter les requêtes que si elles viennent de l'adresse définie
@@ -12,6 +14,19 @@ app.use(cors({
 }))
 
 app.use(express.json());   // Permet de parser le body d'une requête en json (si Content-Type: application/json dans le header de la req)
+
+
+
+
+let db: any
+
+initDatabase().then(connection => {
+    db = connection
+    app.listen(3000)
+    console.log('DB ready')
+})
+
+
 
 // Route post test
 app.post("/api/hello", (req: Request, res: Response) => {
