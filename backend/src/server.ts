@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
-import cors from 'cors'
+import cors from 'cors';
+import pool from './db_connect.js';   // extension .js obligatoire en ESM
 
 const app = express();
 
@@ -13,10 +14,48 @@ app.use(cors({
 
 app.use(express.json());   // Permet de parser le body d'une requête en json (si Content-Type: application/json dans le header de la req)
 
-// Route post test
-app.post("/api/hello", (req: Request, res: Response) => {
-    console.log(req.body);
-    res.send("📧 : Hello !")
+// Enregistre une observation de tortue dans la base
+app.post("/api/observations", async (req: Request, res: Response) => {
+    const {
+        localisation,
+        date_observation,
+        meteo,
+        nombre_tortues,
+        profondeur,
+        photos,
+        commentaires
+    } = req.body;
+
+    // Validation minimale côté serveur
+    if (!localisation || !date_observation) {
+        res.status(400).json({
+            success: false,
+            error: "La localisation et la date d'observation sont obligatoires."
+        });
+        return;
+    }
+
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const result = await conn.query(
+            `INSERT INTO cheloniensmartinique
+                (localisation, date_observation, meteo, nombre_tortues, profondeur, photos, commentaires)
+             VALUES
+                (:localisation, :date_observation, :meteo, :nombre_tortues, :profondeur, :photos, :commentaires)`,
+            { localisation, date_observation, meteo, nombre_tortues, profondeur, photos, commentaires }
+        );
+        // insertId est un BigInt → on le convertit pour le JSON
+        res.status(201).json({ success: true, id: Number(result.insertId) });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            error: "Erreur lors de l'enregistrement de l'observation."
+        });
+    } finally {
+        if (conn) conn.release();   // toujours libérer la connexion
+    }
 })
 
 const port = 3000;

@@ -28,6 +28,8 @@
         "@electron-toolkit/preload": "^3.0.2",
         "@electron-toolkit/utils": "^4.0.0",
         "cors": "^2.8.6",
+        "express": "^5.2.1",
+        "leaflet": "^1.9.4",
         "mariadb": "^3.5.2",
         "vue-router": "^5.1.0"
     },
