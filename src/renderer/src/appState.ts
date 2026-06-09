@@ -44,7 +44,7 @@ const appState = reactive<AppState>({
 
     cssThemeVariables: {
         // cssVarName: ["valueLight", "valueDark", "maybe3rdTheme?"]
-        // Si dark n'a pas de valeur, il prend la valeur de light comme fallback
+        // If no dark value is provided, the light value is used as a fallback
 
         /* Bg, aplats */
         bg: ["#fff", "#3e3e3e"],

@@ -15,10 +15,10 @@ router.post('/', async (req, res) => {
         commentaires,
         sexe,
         stade,
-        user_id  // Ajoute ce champ
+        user_id
     } = req.body
 
-    // Vérifie que l'utilisateur est connecté
+    // Check that the user is authenticated
     if (!user_id) {
         res.status(401).json({ success: false, error: 'Utilisateur non authentifié' })
         return
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
     try {
         conn = await pool.getConnection()
 
-        // Vérifie que l'utilisateur existe
+        // Verify that the user exists
         const user = await conn.query('SELECT id FROM users WHERE id = ?', [user_id])
         if (user.length === 0) {
             res.status(401).json({ success: false, error: 'Utilisateur invalide' })
